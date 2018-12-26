@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,7 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Input() user: Object;
   @Input() isLoggedIn: Boolean;
-  @Input() logout: Function;
+  @Output() logout: any = new EventEmitter();
 
   constructor() { }
 
@@ -16,6 +16,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.logout();
+    this.logout.emit(true);
   }
 }
