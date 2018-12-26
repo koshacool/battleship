@@ -1,12 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import { Subject } from 'rxjs';
+
+interface User {
+  displayName: string;
+  email: string;
+  photoUrl: string;
+}
 
 @Injectable()
 export class AuthService {
+  isLoggedIn: boolean = false;
   token: string;
+  user = new Subject<User>();
 
   constructor(public afAuth: AngularFireAuth) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        const { displayName, email, photoURL: photoUrl } = user;
+        this.user.next({ displayName, email, photoUrl });
+        this.isLoggedIn = true;
+      } else {
+        this.user.next(null);
+        this.isLoggedIn = false;
+      }
+    });
+
     if (!this.token) {
       this.getToken();
     }
@@ -21,11 +41,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return !!firebase.auth().currentUser;
-  }
-
-  test1() {
-    firebase.auth().onAuthStateChanged(res => console.log(1234, res))
+    return this.isLoggedIn;
   }
 
   googleLogin() {
@@ -36,6 +52,7 @@ export class AuthService {
       return this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
+        this.isLoggedIn = true;
         firebase.auth().currentUser.getIdToken()
           .then((token: string) => this.token = token);
 
@@ -61,5 +78,6 @@ export class AuthService {
   logout() {
     return this.afAuth.auth.signOut();
     this.token = '';
+    this.isLoggedIn = false;
   }
 }

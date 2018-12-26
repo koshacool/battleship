@@ -14,14 +14,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
+    // console.log(this.authService.isAuthenticated())
   }
 
   onLogin() {
-    this.authService.test1()
-    // this.authService.googleLogin()
-    // .then((res) => {
-    //   this.router.navigate(['user']);
-    // });
+    this.authService.googleLogin()
+    .then(() => {
+      this.router.navigate(['user']);
+    });
   }
 }

@@ -11,12 +11,12 @@ export class AppComponent implements OnInit {
   title = 'battleship';
   isAuthenticated: boolean = false;
   userName: string = '';
-  
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     const user = this.authService.isAuthenticated();
 
-    console.log(user)
+    // console.log(user)
   }
 }
