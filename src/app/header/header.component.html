@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Battleship</a>
+
+  <div class="collapse navbar-collapse" *ngIf="isLoggedIn; else elseBlock">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/game">Game</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/statistics">Statistics</a>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav" appDropdown #r="appDropdown">
+      <li class="dropdown nav-item" style="cursor: pointer">
+        <a class="dropdown-toggle nav-link" role="button" data-toggle="dropdown">
+          {{user.displayName}} <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu" [ngClass]="{'show': r.isOpen}">
+          <li><a class="dropdown-item">{{user.email}}</a></li>
+          <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <ng-template #elseBlock>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/login">Login</a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link" routerLink="/register">Register</a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</nav>
+

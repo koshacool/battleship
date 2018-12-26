@@ -13,6 +13,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { HeaderComponent } from './header/header.component';
+import { DropdownDirective } from './shared/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     LoginComponent,
     UserComponent,
     NotFoundComponent,
+    HeaderComponent,
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
