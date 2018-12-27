@@ -16,6 +16,7 @@ export class AuthService {
   user = new Subject<User>();
 
   constructor(public afAuth: AngularFireAuth) {
+    console.log(this.user)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const { displayName, email, photoURL: photoUrl } = user;
@@ -52,6 +53,9 @@ export class AuthService {
       return this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
+        const { displayName, email, photoURL: photoUrl } = res.user;
+
+        this.user.next({ displayName, email, photoUrl });
         this.isLoggedIn = true;
         firebase.auth().currentUser.getIdToken()
           .then((token: string) => this.token = token);
@@ -60,8 +64,8 @@ export class AuthService {
       });
   }
 
-  signIn(email: string, password: string) {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+  signIn(data: { email: string, password: string }) {
+    return firebase.auth().signInWithEmailAndPassword(data.email, data.password)
     .then(res => {
       firebase.auth().currentUser.getIdToken()
         .then((token: string) => this.token = token);
@@ -76,8 +80,8 @@ export class AuthService {
   }
 
   logout() {
-    return this.afAuth.auth.signOut();
     this.token = '';
     this.isLoggedIn = false;
+    return this.afAuth.auth.signOut();
   }
 }

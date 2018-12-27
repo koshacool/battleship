@@ -8,10 +8,11 @@ import { AuthGuard } from './auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'user', pathMatch: 'full' },
+  { path: '', redirectTo: 'game', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, },
   { path: 'register', component: RegisterComponent },
-  { path: 'user', component: UserComponent, canActivate: [AuthGuard]},
+  { path: 'game', component: UserComponent, canActivate: [AuthGuard]},
+  { path: 'statistics', component: UserComponent, canActivate: [AuthGuard]},
   { path: '**', component: NotFoundComponent},
 ];
 
