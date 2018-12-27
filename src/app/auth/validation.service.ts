@@ -1,20 +1,32 @@
+const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
 export class ValidationService {
   static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
-      let config = {
-          'required': 'Required',
-          'email': 'Invalid email address', 
-          'minlength': `Minimum length ${validatorValue.requiredLength}`
+      const config = {
+        'required': 'Required',
+        'minlength': `Minimum length ${validatorValue.requiredLength}`,
+        'email': 'Invalid email address',
+        'repeatPassword': 'Invalid repeat password',
       };
 
       return config[validatorName];
   }
 
   static emailValidator(control) {
-      // RFC 2822 compliant regex
-      if (control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
+      if (control.value.match(emailRegex)) {
           return null;
       } else {
-          return { 'invalidEmailAddress': true };
+          return { 'email': true };
+      }
+  }
+
+  static repeatPasswordValidator(formControl) {
+    const { password, repeatPassword } = formControl.controls;
+
+      if (password.value === repeatPassword.value) {
+        return null;
+      } else {
+        return { 'repeatPassword': true };
       }
   }
 }
