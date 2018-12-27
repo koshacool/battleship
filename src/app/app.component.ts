@@ -8,27 +8,9 @@ import { AuthService } from 'src/app/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  isLoggedIn = false;
-  user = {};
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(private authService: AuthService, private router: Router) {
-    this.authService.user.subscribe(
-      user => {
-        if (user) {
-          this.user = user;
-          this.isLoggedIn = true;
-        } else {
-          this.user = {};
-          this.isLoggedIn = false;
-        }
-
-        console.log(this)
-      }
-    );
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onLogout() {
     this.authService.logout().then(() => this.router.navigate(['/login']));

@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { DropdownDirective } from './shared/dropdown.directive';
 import { ControlMessagesComponent } from './auth/control-messages/control-messages.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,11 @@ import { ControlMessagesComponent } from './auth/control-messages/control-messag
     HeaderComponent,
     ControlMessagesComponent,
     DropdownDirective,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
+    Ng4LoadingSpinnerModule.forRoot(),
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

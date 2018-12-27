@@ -1,22 +1,23 @@
-<nav class="navbar navbar-expand navbar-light bg-light">
-  <a class="navbar-brand" href="#">Battleship</a>
-
-  <div class="collapse navbar-collapse" *ngIf="isLoggedIn; else elseBlock">
+{{isLoggedIn}}
+<nav class="navbar navbar-expand navbar-light bg-light mb-3">
+  <a class="navbar-brand" routerLink="/">Battleship</a>
+  <i class="glyphicon glyphicon-refresh spinning"></i>
+  <div class="collapse navbar-collapse" *ngIf="isAuthinticated; else elseBlock">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/game">Game</a>
+        <a class="nav-link" routerLink="/game">GAME</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/statistics">Statistics</a>
+        <a class="nav-link" routerLink="/statistics">STATISTICS</a>
       </li>
     </ul>
-    <ul class="nav navbar-nav" appDropdown #r="appDropdown">
+    <ul class="nav navbar-nav mr-1" appDropdown #r="appDropdown">
       <li class="dropdown nav-item" style="cursor: pointer">
         <a class="dropdown-toggle nav-link" role="button" data-toggle="dropdown">
-          {{user.displayName || user.email}} <span class="caret"></span>
+          {{user.displayName || user.email | uppercase}} <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu" [ngClass]="{'show': r.isOpen}">
-          <li *ngIf="user.displayName === undefined"><a class="dropdown-item">{{user.email}}</a></li>
+        <ul class="dropdown-menu dropdown-menu-right" [ngClass]="{'show': r.isOpen}">
+          <li *ngIf="!!user.displayName"><a class="dropdown-item">{{user.email}}</a></li>
           <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
         </ul>
       </li>
@@ -24,7 +25,8 @@
   </div>
   <ng-template #elseBlock>
     <div class="collapse navbar-collapse">
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto"></ul>
+      <ul class="navbar-nav">
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/login">Login</a>
         </li>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { Subject } from 'rxjs';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 interface User {
   displayName: string;
@@ -11,38 +12,36 @@ interface User {
 
 @Injectable()
 export class AuthService {
-  isLoggedIn: boolean = false;
   token: string;
   user = new Subject<User>();
 
-  constructor(public afAuth: AngularFireAuth) {
-    console.log(this.user)
+  constructor(
+    public afAuth: AngularFireAuth,
+    private spinnerService: Ng4LoadingSpinnerService,
+  ) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const { displayName, email, photoURL: photoUrl } = user;
+        this.getToken();
         this.user.next({ displayName, email, photoUrl });
-        this.isLoggedIn = true;
       } else {
         this.user.next(null);
-        this.isLoggedIn = false;
       }
     });
-
-    if (!this.token) {
-      this.getToken();
-    }
   }
 
   getToken() {
     const user = firebase.auth().currentUser;
-    user && user.getIdToken()
-      .then((token: string) => this.token = token);
+    if (user) {
+      user.getIdToken()
+        .then((token: string) => this.token = token);
+    }
 
     return this.token;
   }
 
   isAuthenticated() {
-    return this.isLoggedIn;
+    return !!this.token;
   }
 
   googleLogin() {
@@ -50,13 +49,16 @@ export class AuthService {
       provider.addScope('profile');
       provider.addScope('email');
 
+      this.spinnerService.show();
+
       return this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
         const { displayName, email, photoURL: photoUrl } = res.user;
 
+        this.spinnerService.hide();
         this.user.next({ displayName, email, photoUrl });
-        this.isLoggedIn = true;
+
         firebase.auth().currentUser.getIdToken()
           .then((token: string) => this.token = token);
 
@@ -65,8 +67,15 @@ export class AuthService {
   }
 
   signIn(data: { email: string, password: string }) {
+    this.spinnerService.show();
+
     return firebase.auth().signInWithEmailAndPassword(data.email, data.password)
     .then(res => {
+      const { displayName, email, photoURL: photoUrl } = res.user;
+
+      this.spinnerService.hide();
+      this.user.next({ displayName, email, photoUrl });
+
       firebase.auth().currentUser.getIdToken()
         .then((token: string) => this.token = token);
 
@@ -75,13 +84,12 @@ export class AuthService {
 }
 
   signUp(data: { email: string, password: string }) {
-      return firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
-      // .catch(error => console.log(error));
+      return firebase.auth().createUserWithEmailAndPassword(data.email, data.password);
   }
 
   logout() {
-    this.token = '';
-    this.isLoggedIn = false;
+    this.token = null;
+    this.user.next(null);
     return this.afAuth.auth.signOut();
   }
 }

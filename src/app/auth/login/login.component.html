@@ -4,7 +4,7 @@
       <form [formGroup]="loginForm">
         <div class="form-group">
           <label>Email address</label>
-          <input type="email" formControlName="email" class="form-control" required>
+          <input type="email" formControlName="email" class="form-control ng-invali" required>
           <app-control-messages
           [control]="loginForm.controls.email"
           [isFormSubmitted]="isSubmitted"></app-control-messages>
@@ -24,7 +24,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-4 col-lg-offset-4">
+    <div class="col-lg-6 col-lg-offset-3">
       <button type="button" class="btn btn-danger btn-block" (click)="onGoogleLogin()">
         Login with google
       </button>
@@ -32,7 +32,7 @@
   </div>
 
   <div class="row">
-    <div class="col-lg-4 col-lg-offset-4">
+    <div class="col-lg-6 col-lg-offset-3">
       <p>No account yet? <a routerLink="/register" style="cursor: pointer">Create an account</a></p>
     </div>
   </div>
