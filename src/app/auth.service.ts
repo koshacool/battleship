@@ -74,9 +74,9 @@ export class AuthService {
     });
 }
 
-  signUp(email: string, password: string) {
-      return firebase.auth().createUserWithEmailAndPassword(email, password)
-      .catch(error => console.log(error));
+  signUp(data: { email: string, password: string }) {
+      return firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+      // .catch(error => console.log(error));
   }
 
   logout() {

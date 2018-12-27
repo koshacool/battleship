@@ -5,16 +5,16 @@
         <div class="form-group">
           <label>Email address</label>
           <input type="email" formControlName="email" class="form-control" required>
-          <control-messages 
-          [control]="loginForm.controls.email" 
-          [isFormSubmitted]="isSubmitted"></control-messages>
+          <app-control-messages
+          [control]="loginForm.controls.email"
+          [isFormSubmitted]="isSubmitted"></app-control-messages>
         </div>
         <div class="form-group">
           <label>Password</label>
           <input type="password" class="form-control" formControlName="password" required>
-          <control-messages 
+          <app-control-messages
           [control]="loginForm.controls.password"
-          [isFormSubmitted]="isSubmitted"></control-messages>
+          [isFormSubmitted]="isSubmitted"></app-control-messages>
         </div>
         <button type="submit" class="btn btn-primary btn-block mb-3" (click)="onFormLogin()" >
           Login
@@ -33,7 +33,7 @@
 
   <div class="row">
     <div class="col-lg-4 col-lg-offset-4">
-      <p>No account yet? <a routerLink="/register">Create an account</a></p>
+      <p>No account yet? <a routerLink="/register" style="cursor: pointer">Create an account</a></p>
     </div>
   </div>
 </div>

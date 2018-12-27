@@ -10,14 +10,13 @@
         <a class="nav-link" routerLink="/statistics">Statistics</a>
       </li>
     </ul>
-
     <ul class="nav navbar-nav" appDropdown #r="appDropdown">
       <li class="dropdown nav-item" style="cursor: pointer">
         <a class="dropdown-toggle nav-link" role="button" data-toggle="dropdown">
-          {{user.displayName}} <span class="caret"></span>
+          {{user.displayName || user.email}} <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" [ngClass]="{'show': r.isOpen}">
-          <li><a class="dropdown-item">{{user.email}}</a></li>
+          <li *ngIf="user.displayName === undefined"><a class="dropdown-item">{{user.email}}</a></li>
           <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
         </ul>
       </li>
