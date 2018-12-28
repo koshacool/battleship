@@ -47,8 +47,7 @@ export class RegisterComponent implements OnInit {
 
     if (status === formControlStatuses.valid) {
       this.authService.signUp(value)
-        .then(res => this.router.navigate(['/game']))
-        .catch(err => console.log('err', err));
+        .then(res => this.router.navigate(['/game']));
     }
   }
 }

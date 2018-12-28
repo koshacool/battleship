@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { Subject } from 'rxjs';
-import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { NotifierService } from 'angular-notifier';
 
 interface User {
   displayName: string;
@@ -18,6 +19,7 @@ export class AuthService {
   constructor(
     public afAuth: AngularFireAuth,
     private spinnerService: Ng4LoadingSpinnerService,
+    private notifierService: NotifierService,
   ) {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -44,14 +46,24 @@ export class AuthService {
     return !!this.token;
   }
 
+  handleError(error) {
+    this.spinnerService.hide();
+    this.notifierService.show({
+      message: error.message,
+      type: 'error',
+    });
+    console.log('Auth service error:', error);
+    throw error;
+  }
+
   googleLogin() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('profile');
-      provider.addScope('email');
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
 
-      this.spinnerService.show();
+    this.spinnerService.show();
 
-      return this.afAuth.auth
+    return this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
         const { displayName, email, photoURL: photoUrl } = res.user;
@@ -63,28 +75,31 @@ export class AuthService {
           .then((token: string) => this.token = token);
 
         return res;
-      });
+      })
+      .catch(this.handleError.bind(this));
   }
 
   signIn(data: { email: string, password: string }) {
     this.spinnerService.show();
 
     return firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-    .then(res => {
-      const { displayName, email, photoURL: photoUrl } = res.user;
+      .then(res => {
+        const { displayName, email, photoURL: photoUrl } = res.user;
 
-      this.spinnerService.hide();
-      this.user.next({ displayName, email, photoUrl });
+        this.spinnerService.hide();
+        this.user.next({ displayName, email, photoUrl });
 
-      firebase.auth().currentUser.getIdToken()
-        .then((token: string) => this.token = token);
+        firebase.auth().currentUser.getIdToken()
+          .then((token: string) => this.token = token);
 
-      return res;
-    });
-}
+        return res;
+      })
+      .catch(this.handleError.bind(this));
+  }
 
   signUp(data: { email: string, password: string }) {
-      return firebase.auth().createUserWithEmailAndPassword(data.email, data.password);
+    return firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+      .catch(this.handleError.bind(this));
   }
 
   logout() {

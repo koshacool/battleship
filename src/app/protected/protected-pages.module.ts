@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { GameComponent } from './game/game.component';
 import { AuthGuard } from './auth-guard.service';
+import { AuthService } from '../auth.service';
+import { GameComponent } from './game/game.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import routes from '../constants/routes';
 
@@ -21,6 +22,10 @@ const protectedRoutes: Routes = [
     CommonModule,
     RouterModule.forChild(protectedRoutes),
   ],
+  providers: [
+    AuthService,
+    AuthGuard,
+  ]
 })
 export class ProtectedPagesModule {
 }

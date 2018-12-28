@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formControlStatuses } from '../formControlStatuses';
+import { NotifierService } from 'angular-notifier';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.createForm();
   }
@@ -41,8 +42,7 @@ export class LoginComponent implements OnInit {
 
   onGoogleLogin() {
     this.authService.googleLogin()
-      .then(() => this.router.navigate(['game']))
-      .catch(err => console.log('err', err));
+      .then(() => this.router.navigate(['game']));
   }
 
   onFormLogin() {
@@ -51,8 +51,7 @@ export class LoginComponent implements OnInit {
 
     if (status === formControlStatuses.valid) {
       this.authService.signIn(value)
-        .then(() => this.router.navigate(['game']))
-        .catch(err => console.log('err', err));
+        .then(() => this.router.navigate(['game']));
     }
   }
 

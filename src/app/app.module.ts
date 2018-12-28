@@ -4,10 +4,11 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { NotifierModule } from 'angular-notifier';
 
 import { environment } from '../environments/environment';
+import { customNotifierOptions } from './notifierConfig';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './protected/auth-guard.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
@@ -30,13 +31,14 @@ import { NotFoundComponent } from './public/not-found/not-found.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    NotifierModule.withConfig(customNotifierOptions),
 
     SharedModule,
     ProtectedPagesModule,
     PublicPagesModule,
     AppRoutingModule,
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
