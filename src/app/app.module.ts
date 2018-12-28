@@ -1,44 +1,39 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import { environment } from '../environments/environment';
-import { AppComponent } from './app.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { LoginComponent } from './auth/login/login.component';
-import { UserComponent } from './auth/user/user.component';
-import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth-guard.service';
-import { NotFoundComponent } from './not-found/not-found.component';
+import { AuthGuard } from './protected/auth-guard.service';
+
+import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared/shared.module';
+import { PublicPagesModule } from './public/public-pages.module';
+import { ProtectedPagesModule } from './protected/protected-pages.module';
+
+import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { DropdownDirective } from './shared/dropdown.directive';
-import { ControlMessagesComponent } from './auth/control-messages/control-messages.component';
-import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './public/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent,
-    LoginComponent,
-    UserComponent,
-    NotFoundComponent,
     HeaderComponent,
-    ControlMessagesComponent,
-    DropdownDirective,
-    HomeComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
     Ng4LoadingSpinnerModule.forRoot(),
-    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+
+    SharedModule,
+    ProtectedPagesModule,
+    PublicPagesModule,
     AppRoutingModule,
   ],
   providers: [AuthService, AuthGuard],
