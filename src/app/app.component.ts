@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { AuthService } from 'src/app/auth.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,12 @@ import { AuthService } from 'src/app/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private spinnerService: Ng4LoadingSpinnerService,
+    ) {}
 
-  ngOnInit() {}
-
-  onLogout() {
-    this.authService.logout().then(() => this.router.navigate(['/login']));
+  ngOnInit() {
+    
   }
 }

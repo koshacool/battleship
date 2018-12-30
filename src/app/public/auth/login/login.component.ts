@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { formControlStatuses } from '../formControlStatuses';
-import { NotifierService } from 'angular-notifier';
+import { Store } from '@ngrx/store';
 
+import { AuthService } from 'src/app/auth.service';
+import { formControlStatuses } from '../formControlStatuses';
+import * as fromApp from '../../../store/app.reducers';
 
 @Component({
   selector: 'app-login',
@@ -19,8 +20,19 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
+    private store: Store<fromApp.AppState>
   ) {
     this.createForm();
+  }
+
+  ngOnInit() {
+    this.store.select('auth').subscribe(
+      ({ isAuthinticated }) => {
+        if (isAuthinticated) {
+          this.router.navigate(['/']);
+        }
+      }
+    );
   }
 
   createForm() {
@@ -30,19 +42,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.authService.user.subscribe(
-      user => {
-        if (user) {
-          this.router.navigate(['/']);
-        }
-      }
-    );
-  }
-
   onGoogleLogin() {
-    this.authService.googleLogin()
-      .then(() => this.router.navigate(['game']));
+    this.authService.googleLogin();
   }
 
   onFormLogin() {
@@ -50,9 +51,7 @@ export class LoginComponent implements OnInit {
     this.isSubmitted = true;
 
     if (status === formControlStatuses.valid) {
-      this.authService.signIn(value)
-        .then(() => this.router.navigate(['game']));
+      this.authService.signIn(value);
     }
   }
-
 }

@@ -1,6 +1,12 @@
-import {Component, Output, OnInit, EventEmitter, NgZone} from '@angular/core';
+import { Component, Output, OnInit, EventEmitter, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import {AuthService} from '../auth.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { AuthService } from '../auth.service';
+import { User } from '../shared/user.interface';
+import * as fromApp from '../store/app.reducers';
 
 @Component({
   selector: 'app-header',
@@ -8,36 +14,28 @@ import {AuthService} from '../auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Output() logout: any = new EventEmitter();
-  user: Object;
-  isAuthinticated: Boolean;
+  user: User;
+  isAuthinticated: boolean;
 
   constructor(
     private authService: AuthService,
     private spinnerService: Ng4LoadingSpinnerService,
-    private zone: NgZone
+    private zone: NgZone,
+    private router: Router,
+    private store: Store<fromApp.AppState>
   ) { }
 
   ngOnInit() {
-    this.spinnerService.show();
-
-    this.authService.user.subscribe(
-      user => {
-        this.spinnerService.hide();
-        if (user) {
-          this.user = user;
-          this.isAuthinticated = true;
-        } else {
-          this.user = {};
-          this.isAuthinticated = false;
-        }
-
+    this.store.select('auth')
+      .subscribe(({ user, isAuthinticated }) => {
+        this.user = user;
+        this.isAuthinticated = isAuthinticated;
+        
         this.zone.run(() => {});
-      }
-    );
+      });
   }
 
   onLogout() {
-    this.logout.emit(true);
+    this.authService.logout();
   }
 }
