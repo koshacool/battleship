@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 
 import { formControlStatuses } from '../formControlStatuses';
 import { AuthService } from 'src/app/auth.service';
 import { ValidationService } from '../validation.service';
+import * as fromApp from '../../../store/app.reducers';
 
 @Component({
   selector: 'app-register',
@@ -18,15 +20,16 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private store: Store<fromApp.AppState>
   ) {
     this.createForm();
   }
 
   ngOnInit() {
-    this.authService.user.subscribe(
-      user => {
-        if (user) {
+    this.store.select('auth').subscribe(
+      ({ isAuthinticated }) => {
+        if (isAuthinticated) {
           this.router.navigate(['/']);
         }
       }
@@ -46,8 +49,7 @@ export class RegisterComponent implements OnInit {
     this.isSubmitted = true;
 
     if (status === formControlStatuses.valid) {
-      this.authService.signUp(value)
-        .then(res => this.router.navigate(['/game']));
+      this.authService.signUp(value);
     }
   }
 }

@@ -18,6 +18,8 @@ import { ProtectedPagesModule } from './protected/protected-pages.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './store/app.reducers';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { NotFoundComponent } from './public/not-found/not-found.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    StoreModule.forRoot(reducers),
     NotifierModule.withConfig(customNotifierOptions),
 
     SharedModule,
