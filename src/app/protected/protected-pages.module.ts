@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { GameComponent } from './game/game.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import routes from '../constants/routes';
+import { BoardService } from './board.service';
 
 const protectedRoutes: Routes = [
   { path: routes.game, component: GameComponent, canActivate: [AuthGuard] },
@@ -25,6 +26,7 @@ const protectedRoutes: Routes = [
   providers: [
     AuthService,
     AuthGuard,
+    BoardService,
   ]
 })
 export class ProtectedPagesModule {
