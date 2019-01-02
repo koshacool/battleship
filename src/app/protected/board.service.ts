@@ -7,9 +7,7 @@ export class BoardService {
   playerId: string = '1';
   boards: Board[] = [];
 
-  constructor(
-  ) {
-  }
+  constructor() {}
 
   createBoard(playerId: string = '1', size: number = 5) {
     let tiles = [];
@@ -34,8 +32,9 @@ export class BoardService {
 
   randomShips(board: Object[], len: number): Object[] {
     len = len - 1;
-    let ranRow = this.getRandomInt(0, len),
-      ranCol = this.getRandomInt(0, len);
+    const ranRow = this.getRandomInt(0, len);
+    const ranCol = this.getRandomInt(0, len);
+    
     if (board[ranRow][ranCol].value == 1) {
       return this.randomShips(board, len);
     } else {

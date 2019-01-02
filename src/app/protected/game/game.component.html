@@ -23,11 +23,17 @@
       </div>
 
 
-      <div class="columns" *ngIf="validPlayer">
+      <div class="columns">
         <div class="column has-text-centered" *ngFor="let board of boards; let i = index">
           <h5>
-            PLAYER {{ board.player.id }} <span class="tag is-info" *ngIf="board.player.id == playerId">You</span>
-            // <strong>SCORE: {{ board.player.score }}</strong>
+            <span class="tag is-info" *ngIf="board.player.id == playerId; else elseBlock">
+              Your field <strong>SCORE: {{ board.player.score }}</strong>
+            </span>
+            <ng-template #elseBlock>
+              <span class="tag is-info">
+                Enemy field <strong>SCORE: {{ board.player.score }}</strong>
+              </span>
+            </ng-template>
           </h5>
           <table class="is-bordered" [style.opacity] = "board.player.id == playerId ? 0.5 : 1">
             <tr *ngFor="let row of board.tiles; let j = index">
@@ -46,12 +52,9 @@
 
 
     <div class="has-text-centered">
-      <span class="tag is-warning" *ngIf="canPlay">Your turn!</span>
-      <span class="tag is-danger" *ngIf="!canPlay">Other player's turn.</span>
-      <h5 class="title"><small>{{ players }} player(s) in game</small></h5>
+      <span class="tag is-warning" *ngIf="isYourTurn">Your turn!</span>
+      <span class="tag is-danger" *ngIf="!isYourTurn">Other player's turn.</span>
     </div>
-
-
   </div>
 </div>
 </div>

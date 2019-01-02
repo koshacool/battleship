@@ -1,4 +1,5 @@
 import { Component, ViewContainerRef } from '@angular/core';
+import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../store/app.reducers';
@@ -7,7 +8,21 @@ import { Board } from './board'
 
 
 const NUM_PLAYERS = 2;
-const BOARD_SIZE = 10;
+const BOATS_COUNT = 10;
+const validateHit = validationConfig => {
+  let errorMessage = '';
+
+  validationConfig.some(({ condition, error }) => {
+    if (condition) {
+      errorMessage = error;
+      return true;
+    }
+
+    return false;
+  });
+
+  return errorMessage;
+}
 
 @Component({
   selector: 'app-game',
@@ -17,9 +32,11 @@ const BOARD_SIZE = 10;
 export class GameComponent {
   playerId: string;
   gameId: string;
+  isYourTurn: boolean = true;
 
   constructor(
     private store: Store<fromApp.AppState>,
+    private notifierService: NotifierService,
     private boardService: BoardService,
   ) {
     this.store.select('auth')
@@ -37,26 +54,48 @@ export class GameComponent {
       const board = this.boards.find(({ player }) => player.id === playerId)
       const row = id[0];
       const col = id[1];
-
       const tile = board.tiles[row][col];
+      const error = this.checkValidHit(playerId, tile);
 
-      console.log(this.boards)
-      if (!this.checkValidHit(playerId, tile)) {
+      if (error) {
+        this.notifierService.show({
+          message: error,
+          type: 'error',
+        });
+
         return;
       }
 
       if (tile.value == 1) {
-        // this.toastr.success("You got this.", "HURRAAA! YOU SANK A SHIP!");
+        this.notifierService.show({
+          message: "You got this. YOU SANK A SHIP!",
+          type: 'info',
+        });
         board.tiles[row][col].status = 'win';
         this.boards.find(({ player }) => player.id === this.playerId).player.score++;
+
       } else {
-        // this.toastr.info("Keep trying fam.", "OOPS! YOU MISSED THIS TIME");
+        this.notifierService.show({
+          message: "OOPS! YOU MISSED THIS TIME",
+          type: 'warning',
+        });
         board.tiles[row][col].status = 'fail'
       }
 
-      // this.canPlay = false;
       board.tiles[row][col].used = true;
       board.tiles[row][col].value = "X";
+
+      const winner = this.winner;
+
+      if (winner) {
+        this.notifierService.show({
+          message: "You win",
+          type: 'success',
+        });
+      } else {
+
+      // this.isYourTurn = false;
+      }
     }
   }
 
@@ -65,33 +104,27 @@ export class GameComponent {
     this.boardService.createBoard();
   }
 
-  checkValidHit(boardId: string, tile: any): boolean {
-    if (boardId == this.playerId) {
-      // this.toastr.error("Don't commit suicide.", "You can't hit your own board.")
-      return false;
-    }
-    if (this.winner) {
-      // this.toastr.error("Game is over");
-      return false;
-    }
-    // if (!this.canPlay) {
-    //   // this.toastr.error("A bit too eager.", "It's not your turn to play.");
-    //   return false;
-    // }
-    if (tile.value == "X") {
-      // this.toastr.error("Don't waste your torpedos.", "You already shot here.");
-      return false;
-    }
-    return true;
-  }
+  checkValidHit(boardId: string, tile: any): string {
+    const validationConfig = [
+      {
+        condition: this.winner,
+        error: 'Game is over',
+      },
+      {
+        condition: boardId == this.playerId,
+        error: 'Don\'t commit suicide. You can\'t hit your own board.',
+      },
+      {
+        condition: !this.isYourTurn,
+        error: 'It\'s not your turn to play.',
+      },
+      {
+        condition: tile.value === "X",
+        error: 'Don\'t waste your torpedos. You already shot here.',
+      },
+    ];
 
-  getQueryParam(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-  }
-
-  getUniqueId() {
-    return 'presence-' + Math.random().toString(36).substr(2, 8);
+    return validateHit(validationConfig);
   }
 
   get boards() {
@@ -99,11 +132,6 @@ export class GameComponent {
   }
 
   get winner(): Board {
-    return this.boards.find(board => board.player.score >= BOARD_SIZE);
-  }
-
-  get validPlayer(): boolean {
-    return true
-    // (this.players >= NUM_PLAYERS) && (this.player < NUM_PLAYERS);
+    return this.boards.find(board => board.player.score === BOATS_COUNT);
   }
 }
