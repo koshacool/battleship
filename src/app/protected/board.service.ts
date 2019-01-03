@@ -19,7 +19,7 @@ export class BoardService {
       }
     }
     // generate random ships for the board
-    for (let i = 0; i < size * 2; i++) {
+    for (let i = 0; i < 5; i++) {
       tiles = this.randomShips(tiles, size);
     }
     // create board
@@ -31,9 +31,8 @@ export class BoardService {
   }
 
   randomShips(board: Object[], len: number): Object[] {
-    len = len - 1;
-    const ranRow = this.getRandomInt(0, len);
-    const ranCol = this.getRandomInt(0, len);
+    const ranRow = this.getRandomInt(len);
+    const ranCol = this.getRandomInt(len);
     
     if (board[ranRow][ranCol].value == 1) {
       return this.randomShips(board, len);
@@ -43,8 +42,8 @@ export class BoardService {
     }
   }
 
-  getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  getRandomInt(len) {
+    return Math.floor(Math.random() * len);
   }
 
   getBoards(): Board[] {

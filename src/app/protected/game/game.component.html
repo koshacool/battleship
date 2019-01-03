@@ -2,26 +2,17 @@
   <div class="container">
     <div class="content">
       <h1 class="title">Ready to sink some battleships?</h1>
-      <h6 class="subtitle is-6"><strong>Pusher Battleship</strong></h6>
 
-      <hr>
 
+      <div class="has-text-centered">
+        <span class="tag is-warning" *ngIf="isYourTurn">Your turn!</span>
+        <span class="tag is-danger" *ngIf="!isYourTurn">Other player's turn.</span>
+      </div>
       <section *ngIf="winner" class="notification is-success has-text-centered" style="color:white">
         <h1>
           Player {{ winner.player.id }} has won the game!
         </h1>
-        <h5>
-          Click <a href="{{ gameUrl }}">here</a> to start a new game.
-        </h5>
       </section>
-
-
-      <div *ngIf="player > 1">
-        <div class="notification is-danger">
-          Sorry, only 2 players can play at a time. You can start your own game by visiting <a href="{{ gameUrl }}">{{ gameUrl }}</a>
-        </div>
-      </div>
-
 
       <div class="columns">
         <div class="column has-text-centered" *ngFor="let board of boards; let i = index">
@@ -46,14 +37,7 @@
             </td>
           </tr>
         </table>
-
       </div>
-    </div>
-
-
-    <div class="has-text-centered">
-      <span class="tag is-warning" *ngIf="isYourTurn">Your turn!</span>
-      <span class="tag is-danger" *ngIf="!isYourTurn">Other player's turn.</span>
     </div>
   </div>
 </div>

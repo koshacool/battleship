@@ -7,8 +7,7 @@ import { BoardService } from '../board.service'
 import { Board } from './board'
 
 
-const NUM_PLAYERS = 2;
-const BOATS_COUNT = 10;
+const BOATS_COUNT = 5;
 const validateHit = validationConfig => {
   let errorMessage = '';
 
@@ -72,8 +71,7 @@ export class GameComponent {
           type: 'info',
         });
         board.tiles[row][col].status = 'win';
-        this.boards.find(({ player }) => player.id === this.playerId).player.score++;
-
+        board.player.score++;
       } else {
         this.notifierService.show({
           message: "OOPS! YOU MISSED THIS TIME",
@@ -85,23 +83,53 @@ export class GameComponent {
       board.tiles[row][col].used = true;
       board.tiles[row][col].value = "X";
 
-      const winner = this.winner;
-
-      if (winner) {
+      if (this.winner) {
         this.notifierService.show({
           message: "You win",
           type: 'success',
         });
       } else {
-
-      // this.isYourTurn = false;
+        this.isYourTurn = false;
+        this.enemyTurn(this.boards.find(({ player }) => player.id !== this.playerId));
       }
     }
   }
 
+  enemyTurn(board) {
+    const row = this.getRandomInt(5);
+    const col = this.getRandomInt(5);
+
+    if (board.tiles[row][col].status) {
+      return this.enemyTurn(board);
+    } else {
+      if (board.tiles[row][col].value == 1) {
+        board.tiles[row][col].status = 'win';
+        board.player.score++;
+      } else {
+        board.tiles[row][col].status = 'fail';
+      }
+
+      board.tiles[row][col].used = true;
+      board.tiles[row][col].value = "X";
+
+      if (this.winner) {
+        this.notifierService.show({
+          message: "Computer win",
+          type: 'error',
+        });
+      }
+      console.log(board.player)
+      this.isYourTurn = true;
+    }
+  }
+
   createBoards(userId: string) {
-    this.boardService.createBoard(userId);
     this.boardService.createBoard();
+    this.boardService.createBoard(userId);
+  }
+
+  getRandomInt(len) {
+    return Math.floor(Math.random() * len);
   }
 
   checkValidHit(boardId: string, tile: any): string {
