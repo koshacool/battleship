@@ -9,8 +9,6 @@ export const environment = {
     authDomain: "battleship-776a6.firebaseapp.com",
     databaseURL: "https://battleship-776a6.firebaseio.com",
     projectId: "battleship-776a6",
-    storageBucket: "battleship-776a6.appspot.com",
-    messagingSenderId: "603953396460"
   }
 };
 
