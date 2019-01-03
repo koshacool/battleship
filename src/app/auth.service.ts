@@ -30,11 +30,11 @@ export class AuthService {
         this.spinnerService.hide();
 
         if (user) {
-          const { displayName, email, photoURL: photoUrl } = user;
+          const { displayName, email, photoURL: photoUrl, uid } = user;
           
           this.isLoggedIn = true;
-          this.user.next({ displayName, email, photoUrl });
-          this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl }));
+          this.user.next({ displayName, email, photoUrl, uid });
+          this.store.dispatch(new authActions.Signin({ displayName, email, photoUrl, uid }));
           this.getToken();
         } else {
           this.isLoggedIn = false;
@@ -56,11 +56,11 @@ export class AuthService {
   }
   
   handleAuth(res) {
-    const { displayName, email, photoURL: photoUrl } = res.user;
-    
+    const { displayName, email, photoURL: photoUrl, uid } = res.user;
+    console.log(res)
     this.isLoggedIn = true;
     this.spinnerService.hide();
-    this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl }));
+    this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl, uid }));
     this.getToken();
     this.router.navigate(['game']);
   }

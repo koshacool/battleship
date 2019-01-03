@@ -2,7 +2,6 @@ import { Component, Output, OnInit, EventEmitter, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 import { User } from '../shared/user.interface';
@@ -30,7 +29,6 @@ export class HeaderComponent implements OnInit {
       .subscribe(({ user, isAuthinticated }) => {
         this.user = user;
         this.isAuthinticated = isAuthinticated;
-        
         this.zone.run(() => {});
       });
   }
