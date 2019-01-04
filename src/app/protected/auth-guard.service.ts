@@ -23,11 +23,11 @@ export class AuthGuard implements CanActivate {
     if (this.authService.isLoggedIn) {
       return true;
     }
-    
+
     return this.authService.user.pipe(
       map(user => !!user),
       tap(loggedIn => {
-        console.log(loggedIn)
+        console.log(loggedIn);
         if (loggedIn) {
           return true;
         }
