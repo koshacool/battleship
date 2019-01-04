@@ -27,6 +27,6 @@ deploy:
   keep-history: true
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: dist
+  local_dir: dist/battleship
   on:
     branch: master
