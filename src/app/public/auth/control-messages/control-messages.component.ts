@@ -2,18 +2,6 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ValidationService } from '../validation.service';
 
-const getControlErrorsMessage = (controlErrors: object): string => {
-  let message = '';
-
-  Object.keys(controlErrors).find(key => {
-    message = ValidationService.getValidatorErrorMessage(key, controlErrors[key]);
-    return !!message;
-  });
-
-  return message;
-};
-
-
 @Component({
   selector: 'app-control-messages',
   template: `<div *ngIf="errorMessage" class="ml1 text-danger">{{errorMessage}}</div>`
@@ -24,19 +12,17 @@ export class ControlMessagesComponent {
   @Input() isFormSubmitted: boolean;
 
   get errorMessage() {
-    if ((this.control.touched || this.isFormSubmitted) && this.control.errors) {
-      const validationMessage = getControlErrorsMessage(this.control.errors);
-
-      if (validationMessage) {
-        return validationMessage;
+    for (const propertyName in this.control.errors) {
+      if (this.control.touched || this.isFormSubmitted) {
+        return ValidationService
+          .getValidatorErrorMessage(propertyName, this.control.errors[propertyName]);
       }
     }
 
     if (this.customErrors) {
-      const customValidationMessage = getControlErrorsMessage(this.customErrors);
-
-      if (customValidationMessage) {
-        return customValidationMessage;
+      for (const propertyName in this.customErrors) {
+        return ValidationService
+          .getValidatorErrorMessage(propertyName, this.customErrors[propertyName]);
       }
     }
 
