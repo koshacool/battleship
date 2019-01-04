@@ -94,6 +94,7 @@ export class GameComponent {
         });
       } else {
 
+      // TODO: test
       // this.isYourTurn = false;
       }
     }
