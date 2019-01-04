@@ -15,7 +15,7 @@ import { User } from './shared/user.interface';
 @Injectable()
 export class AuthService {
   user = new Subject<User>();
-  isLoggedIn = false;
+  isLoggedIn: boolean = false;
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -31,7 +31,7 @@ export class AuthService {
 
         if (user) {
           const { displayName, email, photoURL: photoUrl, uid } = user;
-
+          
           this.isLoggedIn = true;
           this.user.next({ displayName, email, photoUrl, uid });
           this.store.dispatch(new authActions.Signin({ displayName, email, photoUrl, uid }));
@@ -50,14 +50,14 @@ export class AuthService {
       message: error.message,
       type: 'error',
     });
-
+    
     console.error('Auth service error:', error);
     return throwError(error);
   }
-
+  
   handleAuth(res) {
     const { displayName, email, photoURL: photoUrl, uid } = res.user;
-    console.log(res);
+    console.log(res)
     this.isLoggedIn = true;
     this.spinnerService.hide();
     this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl, uid }));
@@ -70,7 +70,7 @@ export class AuthService {
 
     if (user) {
       user.getIdToken()
-        .then((token: string) =>
+        .then((token: string) => 
           this.store.dispatch(new authActions.SetToken(token))
         )
         .catch(this.handleError.bind(this));
@@ -92,7 +92,7 @@ export class AuthService {
 
   signIn(data: { email: string, password: string }) {
     this.spinnerService.show();
-
+  
     return firebase.auth().signInWithEmailAndPassword(data.email, data.password)
       .then(this.handleAuth.bind(this))
       .catch(this.handleError.bind(this));
@@ -108,9 +108,9 @@ export class AuthService {
 
   logout() {
     firebase.auth().signOut();
-
+    
     this.isLoggedIn = false;
     this.store.dispatch(new authActions.Logout());
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'])
   }
 }

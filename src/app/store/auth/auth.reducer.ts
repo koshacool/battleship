@@ -11,7 +11,7 @@ const initialState: State = {
   token: null,
   user: null,
   isAuthinticated: false,
-};
+}
 
 export function authReducer(state = initialState, action: AuthActions.AuthActions) {
   switch (action.type) {
