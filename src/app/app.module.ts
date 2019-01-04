@@ -5,6 +5,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { NotifierModule } from 'angular-notifier';
+import { StoreModule, ActionReducer, State } from '@ngrx/store';
+import { storeLogger } from 'ngrx-store-logger';
 
 import { environment } from '../environments/environment';
 import { customNotifierOptions } from './notifierConfig';
@@ -18,8 +20,13 @@ import { ProtectedPagesModule } from './protected/protected-pages.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
-import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/app.reducers';
+
+function logger(reducer): any {
+  // default, no options
+  return storeLogger()(reducer);
+};
+const metaReducers = environment.production ? [] : [logger];
 
 @NgModule({
   declarations: [
@@ -33,7 +40,7 @@ import { reducers } from './store/app.reducers';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     NotifierModule.withConfig(customNotifierOptions),
 
     SharedModule,

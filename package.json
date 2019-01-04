@@ -27,6 +27,7 @@
     "core-js": "^2.5.4",
     "firebase": "^5.7.1",
     "ng4-loading-spinner": "^1.2.3",
+    "ngrx-store-logger": "^0.2.2",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
