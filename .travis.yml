@@ -1,0 +1,32 @@
+language: node_js
+node_js:
+  - "9"
+
+dist: trusty
+
+sudo: false
+
+branches:
+  only:
+  - master
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm i
+
+script:
+  - npm run lint
+  - npm run test
+  - npm run build
+
+deploy:
+  provider: pages
+  keep-history: true
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: dist/battleship
+  on:
+    branch: master
