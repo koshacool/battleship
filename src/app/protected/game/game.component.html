@@ -16,13 +16,6 @@
       </section>
 
 
-      <div *ngIf="player > 1">
-        <div class="notification is-danger">
-          Sorry, only 2 players can play at a time. You can start your own game by visiting <a href="{{ gameUrl }}">{{ gameUrl }}</a>
-        </div>
-      </div>
-
-
       <div class="columns">
         <div class="column has-text-centered" *ngFor="let board of boards; let i = index">
           <h5>
