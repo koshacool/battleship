@@ -3,8 +3,8 @@ import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../store/app.reducers';
-import { BoardService } from '../board.service'
-import { Board } from './board'
+import { BoardService } from '../board.service';
+import { Board } from './board';
 
 
 const NUM_PLAYERS = 2;
@@ -22,7 +22,7 @@ const validateHit = validationConfig => {
   });
 
   return errorMessage;
-}
+};
 
 @Component({
   selector: 'app-game',
@@ -32,7 +32,7 @@ const validateHit = validationConfig => {
 export class GameComponent {
   playerId: string;
   gameId: string;
-  isYourTurn: boolean = true;
+  isYourTurn = true;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -51,7 +51,7 @@ export class GameComponent {
   fireTorpedo(playerId) {
     return (e) => {
       const { id } = e.target;
-      const board = this.boards.find(({ player }) => player.id === playerId)
+      const board = this.boards.find(({ player }) => player.id === playerId);
       const row = id[0];
       const col = id[1];
       const tile = board.tiles[row][col];
@@ -66,9 +66,9 @@ export class GameComponent {
         return;
       }
 
-      if (tile.value == 1) {
+      if (tile.value === 1) {
         this.notifierService.show({
-          message: "You got this. YOU SANK A SHIP!",
+          message: 'You got this. YOU SANK A SHIP!',
           type: 'info',
         });
         board.tiles[row][col].status = 'win';
@@ -76,20 +76,20 @@ export class GameComponent {
 
       } else {
         this.notifierService.show({
-          message: "OOPS! YOU MISSED THIS TIME",
+          message: 'OOPS! YOU MISSED THIS TIME',
           type: 'warning',
         });
-        board.tiles[row][col].status = 'fail'
+        board.tiles[row][col].status = 'fail';
       }
 
       board.tiles[row][col].used = true;
-      board.tiles[row][col].value = "X";
+      board.tiles[row][col].value = 'X';
 
       const winner = this.winner;
 
       if (winner) {
         this.notifierService.show({
-          message: "You win",
+          message: 'You win',
           type: 'success',
         });
       } else {
@@ -97,7 +97,7 @@ export class GameComponent {
       // TODO: test
       // this.isYourTurn = false;
       }
-    }
+    };
   }
 
   createBoards(userId: string) {
@@ -112,7 +112,7 @@ export class GameComponent {
         error: 'Game is over',
       },
       {
-        condition: boardId == this.playerId,
+        condition: boardId === this.playerId,
         error: 'Don\'t commit suicide. You can\'t hit your own board.',
       },
       {
@@ -120,7 +120,7 @@ export class GameComponent {
         error: 'It\'s not your turn to play.',
       },
       {
-        condition: tile.value === "X",
+        condition: tile.value === 'X',
         error: 'Don\'t waste your torpedos. You already shot here.',
       },
     ];
@@ -129,7 +129,7 @@ export class GameComponent {
   }
 
   get boards() {
-    return this.boardService.getBoards()
+    return this.boardService.getBoards();
   }
 
   get winner(): Board {
