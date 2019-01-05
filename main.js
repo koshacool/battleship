@@ -587,7 +587,7 @@ var BoardService = /** @class */ (function () {
             }
         }
         // generate random ships for the board
-        for (var i = 0; i < size * 2; i++) {
+        for (var i = 0; i < 5; i++) {
             tiles = this.randomShips(tiles, size);
         }
         // create board
@@ -598,9 +598,8 @@ var BoardService = /** @class */ (function () {
         this.boards.push(board);
     };
     BoardService.prototype.randomShips = function (board, len) {
-        len = len - 1;
-        var ranRow = this.getRandomInt(0, len);
-        var ranCol = this.getRandomInt(0, len);
+        var ranRow = this.getRandomInt(len);
+        var ranCol = this.getRandomInt(len);
         if (board[ranRow][ranCol].value === 1) {
             return this.randomShips(board, len);
         }
@@ -609,8 +608,8 @@ var BoardService = /** @class */ (function () {
             return board;
         }
     };
-    BoardService.prototype.getRandomInt = function (min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    BoardService.prototype.getRandomInt = function (len) {
+        return Math.floor(Math.random() * len);
     };
     BoardService.prototype.getBoards = function () {
         return this.boards;
@@ -666,7 +665,7 @@ module.exports = ".content table td, .content table th {\n  border: 1px solid #d
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\">\n      <h1 class=\"title\">Ready to sink some battleships?</h1>\n      <h6 class=\"subtitle is-6\"><strong>Pusher Battleship</strong></h6>\n\n      <hr>\n\n      <section *ngIf=\"winner\" class=\"notification is-success has-text-centered\" style=\"color:white\">\n        <h1>\n          Player {{ winner.player.id }} has won the game!\n        </h1>\n        <h5>\n          Click <a href=\"{{ gameUrl }}\">here</a> to start a new game.\n        </h5>\n      </section>\n\n\n      <div class=\"columns\">\n        <div class=\"column has-text-centered\" *ngFor=\"let board of boards; let i = index\">\n          <h5>\n            <span class=\"tag is-info\" *ngIf=\"board.player.id == playerId; else elseBlock\">\n              Your field <strong>SCORE: {{ board.player.score }}</strong>\n            </span>\n            <ng-template #elseBlock>\n              <span class=\"tag is-info\">\n                Enemy field <strong>SCORE: {{ board.player.score }}</strong>\n              </span>\n            </ng-template>\n          </h5>\n          <table class=\"is-bordered\" [style.opacity] = \"board.player.id == playerId ? 0.5 : 1\">\n            <tr *ngFor=\"let row of board.tiles; let j = index\">\n              <td *ngFor=\"let col of row; let k = index\"\n              (click) = \"fireTorpedo(board.player.id)($event)\"\n              [style.background-color] = \"col.used ? '' : 'transparent'\"\n              [class.win] = \"col.status == 'win'\" [class.fail] = \"col.status !== 'win'\"\n              class=\"battleship-tile\" id=\"{{j}}{{k}}{{board.player.id}}\">\n              {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n            </td>\n          </tr>\n        </table>\n\n      </div>\n    </div>\n\n\n    <div class=\"has-text-centered\">\n      <span class=\"tag is-warning\" *ngIf=\"isYourTurn\">Your turn!</span>\n      <span class=\"tag is-danger\" *ngIf=\"!isYourTurn\">Other player's turn.</span>\n    </div>\n  </div>\n</div>\n</div>\n"
+module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\">\n      <h1 class=\"title\">Ready to sink some battleships?</h1>\n\n\n      <div class=\"has-text-centered\">\n        <span class=\"tag is-warning\" *ngIf=\"isYourTurn\">Your turn!</span>\n        <span class=\"tag is-danger\" *ngIf=\"!isYourTurn\">Other player's turn.</span>\n      </div>\n      <section *ngIf=\"winner\" class=\"notification is-success has-text-centered\" style=\"color:white\">\n        <h1>\n          Player {{ winner.player.id }} has won the game!\n        </h1>\n      </section>\n\n\n      <div class=\"columns\">\n        <div class=\"column has-text-centered\" *ngFor=\"let board of boards; let i = index\">\n          <h5>\n            <span class=\"tag is-info\" *ngIf=\"board.player.id == playerId; else elseBlock\">\n              Your field <strong>SCORE: {{ board.player.score }}</strong>\n            </span>\n            <ng-template #elseBlock>\n              <span class=\"tag is-info\">\n                Enemy field <strong>SCORE: {{ board.player.score }}</strong>\n              </span>\n            </ng-template>\n          </h5>\n          <table class=\"is-bordered\" [style.opacity]=\"board.player.id === playerId ? 0.5 : 1\">\n            <tr *ngFor=\"let row of board.tiles; let j = index\">\n              <td\n                *ngFor=\"let col of row; let k = index\"\n                (click)=\"fireTorpedo($event)\"\n                [style.background-color]=\"col.used ? '' : 'transparent'\"\n                [class.win]=\"col.status === 'win'\" [class.fail]=\"col.status !== 'win'\"\n                class=\"battleship-tile\"\n                id=\"{{j}}{{k}}{{board.player.id}}\"\n              >\n                {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n              </td>\n            </tr>\n          </table>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -690,19 +689,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var NUM_PLAYERS = 2;
-var BOATS_COUNT = 10;
+var BOATS_COUNT = 5;
 var validateHit = function (validationConfig) {
-    var errorMessage = '';
-    validationConfig.some(function (_a) {
-        var condition = _a.condition, error = _a.error;
-        if (condition) {
-            errorMessage = error;
-            return true;
-        }
-        return false;
+    var rule = validationConfig.find(function (_a) {
+        var condition = _a.condition;
+        return condition ? true : false;
     });
-    return errorMessage;
+    return rule ? rule.error : '';
 };
 var GameComponent = /** @class */ (function () {
     function GameComponent(store, notifierService, boardService) {
@@ -720,61 +713,89 @@ var GameComponent = /** @class */ (function () {
             }
         });
     }
-    GameComponent.prototype.fireTorpedo = function (playerId) {
-        var _this = this;
-        return function (e) {
-            var id = e.target.id;
-            var board = _this.boards.find(function (_a) {
-                var player = _a.player;
-                return player.id === playerId;
+    GameComponent.prototype.fireTorpedo = function (e) {
+        var id = e.target.id;
+        var row = id[0];
+        var col = id[1];
+        var boardId = id.slice(2);
+        var board = this.boards.find(function (_a) {
+            var player = _a.player;
+            return player.id === boardId;
+        });
+        var tile = board.tiles[row][col];
+        var error = this.checkValidHit(boardId, tile);
+        console.log(boardId, error);
+        if (error) {
+            this.notifierService.show({
+                message: error,
+                type: 'error',
             });
-            var row = id[0];
-            var col = id[1];
-            var tile = board.tiles[row][col];
-            var error = _this.checkValidHit(playerId, tile);
-            if (error) {
-                _this.notifierService.show({
-                    message: error,
-                    type: 'error',
-                });
-                return;
-            }
-            if (tile.value === 1) {
-                _this.notifierService.show({
-                    message: 'You got this. YOU SANK A SHIP!',
-                    type: 'info',
-                });
+            return;
+        }
+        if (tile.value === 1) {
+            this.notifierService.show({
+                message: 'You got this. YOU SANK A SHIP!',
+                type: 'info',
+            });
+            board.tiles[row][col].status = 'win';
+            board.player.score++;
+        }
+        else {
+            this.notifierService.show({
+                message: 'OOPS! YOU MISSED THIS TIME',
+                type: 'warning',
+            });
+            board.tiles[row][col].status = 'fail';
+        }
+        board.tiles[row][col].used = true;
+        board.tiles[row][col].value = 'X';
+        if (this.winner) {
+            this.notifierService.show({
+                message: 'You win',
+                type: 'success',
+            });
+        }
+        else {
+            this.isYourTurn = false;
+            this.enemyTurn();
+        }
+    };
+    GameComponent.prototype.enemyTurn = function () {
+        var _this = this;
+        var board = this.boards.find(function (_a) {
+            var player = _a.player;
+            return player.id === _this.playerId;
+        });
+        var row = this.getRandomInt(5);
+        var col = this.getRandomInt(5);
+        if (board.tiles[row][col].status) {
+            return this.enemyTurn();
+        }
+        else {
+            if (board.tiles[row][col].value === 1) {
                 board.tiles[row][col].status = 'win';
-                _this.boards.find(function (_a) {
-                    var player = _a.player;
-                    return player.id === _this.playerId;
-                }).player.score++;
+                board.player.score++;
             }
             else {
-                _this.notifierService.show({
-                    message: 'OOPS! YOU MISSED THIS TIME',
-                    type: 'warning',
-                });
                 board.tiles[row][col].status = 'fail';
             }
             board.tiles[row][col].used = true;
             board.tiles[row][col].value = 'X';
-            var winner = _this.winner;
-            if (winner) {
-                _this.notifierService.show({
-                    message: 'You win',
-                    type: 'success',
+            if (this.winner) {
+                this.notifierService.show({
+                    message: 'Computer win',
+                    type: 'error',
                 });
             }
-            else {
-                // TODO: test
-                // this.isYourTurn = false;
-            }
-        };
+            this.isYourTurn = true;
+        }
     };
     GameComponent.prototype.createBoards = function (userId) {
-        this.boardService.createBoard(userId);
         this.boardService.createBoard();
+        this.boardService.createBoard(userId);
+    };
+    GameComponent.prototype.getRandomInt = function (len) {
+        return Math.floor(Math.random() * len);
     };
     GameComponent.prototype.checkValidHit = function (boardId, tile) {
         var validationConfig = [
