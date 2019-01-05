@@ -1,27 +1,18 @@
-import { Component, ViewContainerRef } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
-import { Store } from '@ngrx/store';
+import {Component, ViewContainerRef} from '@angular/core';
+import {NotifierService} from 'angular-notifier';
+import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../store/app.reducers';
-import { BoardService } from '../board.service'
-import { Board } from './board'
+import {BoardService} from '../board.service';
+import {Board} from './board';
 
 
 const BOATS_COUNT = 5;
 const validateHit = validationConfig => {
-  let errorMessage = '';
+  const rule = validationConfig.find(({condition}) => condition ? true : false);
 
-  validationConfig.some(({ condition, error }) => {
-    if (condition) {
-      errorMessage = error;
-      return true;
-    }
-
-    return false;
-  });
-
-  return errorMessage;
-}
+  return rule ? rule.error : '';
+};
 
 @Component({
   selector: 'app-game',
@@ -39,7 +30,7 @@ export class GameComponent {
     private boardService: BoardService,
   ) {
     this.store.select('auth')
-      .subscribe(({ user, isAuthinticated }) => {
+      .subscribe(({user, isAuthinticated}) => {
         if (isAuthinticated && !this.playerId) {
           this.playerId = user.uid;
           this.createBoards(user.uid);
@@ -47,62 +38,62 @@ export class GameComponent {
       });
   }
 
-  fireTorpedo(playerId) {
-    return (e) => {
-      const { id } = e.target;
-      const board = this.boards.find(({ player }) => player.id === playerId)
-      const row = id[0];
-      const col = id[1];
-      const tile = board.tiles[row][col];
-      const error = this.checkValidHit(playerId, tile);
+  fireTorpedo(e) {
+    const {id} = e.target;
+    const row = id[0];
+    const col = id[1];
+    const boardId = id.slice(2);
+    const board = this.boards.find(({player}) => player.id === boardId);
+    const tile = board.tiles[row][col];
+    const error = this.checkValidHit(boardId, tile);
+    console.log(boardId, error);
+    if (error) {
+      this.notifierService.show({
+        message: error,
+        type: 'error',
+      });
 
-      if (error) {
-        this.notifierService.show({
-          message: error,
-          type: 'error',
-        });
+      return;
+    }
 
-        return;
-      }
+    if (tile.value === 1) {
+      this.notifierService.show({
+        message: 'You got this. YOU SANK A SHIP!',
+        type: 'info',
+      });
+      board.tiles[row][col].status = 'win';
+      board.player.score++;
+    } else {
+      this.notifierService.show({
+        message: 'OOPS! YOU MISSED THIS TIME',
+        type: 'warning',
+      });
+      board.tiles[row][col].status = 'fail';
+    }
 
-      if (tile.value == 1) {
-        this.notifierService.show({
-          message: "You got this. YOU SANK A SHIP!",
-          type: 'info',
-        });
-        board.tiles[row][col].status = 'win';
-        board.player.score++;
-      } else {
-        this.notifierService.show({
-          message: "OOPS! YOU MISSED THIS TIME",
-          type: 'warning',
-        });
-        board.tiles[row][col].status = 'fail'
-      }
+    board.tiles[row][col].used = true;
+    board.tiles[row][col].value = 'X';
 
-      board.tiles[row][col].used = true;
-      board.tiles[row][col].value = "X";
-
-      if (this.winner) {
-        this.notifierService.show({
-          message: "You win",
-          type: 'success',
-        });
-      } else {
-        this.isYourTurn = false;
-        this.enemyTurn(this.boards.find(({ player }) => player.id !== this.playerId));
-      }
+    if (this.winner) {
+      this.notifierService.show({
+        message: 'You win',
+        type: 'success',
+      });
+    } else {
+      this.isYourTurn = false;
+      this.enemyTurn();
     }
   }
 
-  enemyTurn(board) {
+  enemyTurn() {
+    const board = this.boards.find(({player}) => player.id === this.playerId);
     const row = this.getRandomInt(5);
     const col = this.getRandomInt(5);
 
     if (board.tiles[row][col].status) {
-      return this.enemyTurn(board);
+      return this.enemyTurn();
     } else {
-      if (board.tiles[row][col].value == 1) {
+      if (board.tiles[row][col].value === 1) {
         board.tiles[row][col].status = 'win';
         board.player.score++;
       } else {
@@ -110,15 +101,15 @@ export class GameComponent {
       }
 
       board.tiles[row][col].used = true;
-      board.tiles[row][col].value = "X";
+      board.tiles[row][col].value = 'X';
 
       if (this.winner) {
         this.notifierService.show({
-          message: "Computer win",
+          message: 'Computer win',
           type: 'error',
         });
       }
-      console.log(board.player)
+
       this.isYourTurn = true;
     }
   }
@@ -139,7 +130,7 @@ export class GameComponent {
         error: 'Game is over',
       },
       {
-        condition: boardId == this.playerId,
+        condition: boardId === this.playerId,
         error: 'Don\'t commit suicide. You can\'t hit your own board.',
       },
       {
@@ -147,7 +138,7 @@ export class GameComponent {
         error: 'It\'s not your turn to play.',
       },
       {
-        condition: tile.value === "X",
+        condition: tile.value === 'X',
         error: 'Don\'t waste your torpedos. You already shot here.',
       },
     ];
@@ -156,7 +147,7 @@ export class GameComponent {
   }
 
   get boards() {
-    return this.boardService.getBoards()
+    return this.boardService.getBoards();
   }
 
   get winner(): Board {

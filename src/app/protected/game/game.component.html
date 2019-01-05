@@ -26,19 +26,22 @@
               </span>
             </ng-template>
           </h5>
-          <table class="is-bordered" [style.opacity] = "board.player.id == playerId ? 0.5 : 1">
+          <table class="is-bordered" [style.opacity]="board.player.id === playerId ? 0.5 : 1">
             <tr *ngFor="let row of board.tiles; let j = index">
-              <td *ngFor="let col of row; let k = index"
-              (click) = "fireTorpedo(board.player.id)($event)"
-              [style.background-color] = "col.used ? '' : 'transparent'"
-              [class.win] = "col.status == 'win'" [class.fail] = "col.status !== 'win'"
-              class="battleship-tile" id="{{j}}{{k}}{{board.player.id}}">
-              {{ col.value == "X" ? "X" : "💀" }}
-            </td>
-          </tr>
-        </table>
+              <td
+                *ngFor="let col of row; let k = index"
+                (click)="fireTorpedo($event)"
+                [style.background-color]="col.used ? '' : 'transparent'"
+                [class.win]="col.status === 'win'" [class.fail]="col.status !== 'win'"
+                class="battleship-tile"
+                id="{{j}}{{k}}{{board.player.id}}"
+              >
+                {{ col.value == "X" ? "X" : "💀" }}
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
