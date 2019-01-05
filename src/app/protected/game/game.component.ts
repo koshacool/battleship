@@ -1,27 +1,17 @@
-import { Component, ViewContainerRef } from '@angular/core';
-import { NotifierService } from 'angular-notifier';
-import { Store } from '@ngrx/store';
+import {Component, ViewContainerRef} from '@angular/core';
+import {NotifierService} from 'angular-notifier';
+import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../store/app.reducers';
-import { BoardService } from '../board.service';
-import { Board } from './board';
+import {BoardService} from '../board.service';
+import {Board} from './board';
 
 
-const NUM_PLAYERS = 2;
-const BOATS_COUNT = 10;
+const BOATS_COUNT = 5;
 const validateHit = validationConfig => {
-  let errorMessage = '';
+  const rule = validationConfig.find(({condition}) => condition ? true : false);
 
-  validationConfig.some(({ condition, error }) => {
-    if (condition) {
-      errorMessage = error;
-      return true;
-    }
-
-    return false;
-  });
-
-  return errorMessage;
+  return rule ? rule.error : '';
 };
 
 @Component({
@@ -40,7 +30,7 @@ export class GameComponent {
     private boardService: BoardService,
   ) {
     this.store.select('auth')
-      .subscribe(({ user, isAuthinticated }) => {
+      .subscribe(({user, isAuthinticated}) => {
         if (isAuthinticated && !this.playerId) {
           this.playerId = user.uid;
           this.createBoards(user.uid);
@@ -48,61 +38,89 @@ export class GameComponent {
       });
   }
 
-  fireTorpedo(playerId) {
-    return (e) => {
-      const { id } = e.target;
-      const board = this.boards.find(({ player }) => player.id === playerId);
-      const row = id[0];
-      const col = id[1];
-      const tile = board.tiles[row][col];
-      const error = this.checkValidHit(playerId, tile);
+  fireTorpedo(e) {
+    const {id} = e.target;
+    const row = id[0];
+    const col = id[1];
+    const boardId = id.slice(2);
+    const board = this.boards.find(({player}) => player.id === boardId);
+    const tile = board.tiles[row][col];
+    const error = this.checkValidHit(boardId, tile);
+    console.log(boardId, error);
+    if (error) {
+      this.notifierService.show({
+        message: error,
+        type: 'error',
+      });
 
-      if (error) {
-        this.notifierService.show({
-          message: error,
-          type: 'error',
-        });
+      return;
+    }
 
-        return;
-      }
+    if (tile.value === 1) {
+      this.notifierService.show({
+        message: 'You got this. YOU SANK A SHIP!',
+        type: 'info',
+      });
+      board.tiles[row][col].status = 'win';
+      board.player.score++;
+    } else {
+      this.notifierService.show({
+        message: 'OOPS! YOU MISSED THIS TIME',
+        type: 'warning',
+      });
+      board.tiles[row][col].status = 'fail';
+    }
 
-      if (tile.value === 1) {
-        this.notifierService.show({
-          message: 'You got this. YOU SANK A SHIP!',
-          type: 'info',
-        });
+    board.tiles[row][col].used = true;
+    board.tiles[row][col].value = 'X';
+
+    if (this.winner) {
+      this.notifierService.show({
+        message: 'You win',
+        type: 'success',
+      });
+    } else {
+      this.isYourTurn = false;
+      this.enemyTurn();
+    }
+  }
+
+  enemyTurn() {
+    const board = this.boards.find(({player}) => player.id === this.playerId);
+    const row = this.getRandomInt(5);
+    const col = this.getRandomInt(5);
+
+    if (board.tiles[row][col].status) {
+      return this.enemyTurn();
+    } else {
+      if (board.tiles[row][col].value === 1) {
         board.tiles[row][col].status = 'win';
-        this.boards.find(({ player }) => player.id === this.playerId).player.score++;
-
+        board.player.score++;
       } else {
-        this.notifierService.show({
-          message: 'OOPS! YOU MISSED THIS TIME',
-          type: 'warning',
-        });
         board.tiles[row][col].status = 'fail';
       }
 
       board.tiles[row][col].used = true;
       board.tiles[row][col].value = 'X';
 
-      const winner = this.winner;
-
-      if (winner) {
+      if (this.winner) {
         this.notifierService.show({
-          message: 'You win',
-          type: 'success',
+          message: 'Computer win',
+          type: 'error',
         });
-      } else {
-
-      // TODO: test
-      // this.isYourTurn = false;
       }
-    };
+
+      this.isYourTurn = true;
+    }
   }
 
   createBoards(userId: string) {
-    this.boardService.createBoard(userId);
     this.boardService.createBoard();
+    this.boardService.createBoard(userId);
+  }
+
+  getRandomInt(len) {
+    return Math.floor(Math.random() * len);
   }
 
   checkValidHit(boardId: string, tile: any): string {
