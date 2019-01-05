@@ -22,7 +22,7 @@ const validateHit = validationConfig => {
 export class GameComponent {
   playerId: string;
   gameId: string;
-  isYourTurn: boolean = true;
+  isYourTurn = true;
 
   constructor(
     private store: Store<fromApp.AppState>,

@@ -25,7 +25,7 @@ import { reducers } from './store/app.reducers';
 function logger(reducer): any {
   // default, no options
   return storeLogger()(reducer);
-};
+}
 const metaReducers = environment.production ? [] : [logger];
 
 @NgModule({

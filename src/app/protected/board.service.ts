@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Board } from './game/board'
-import { Player } from './game/player'
+import { Board } from './game/board';
+import { Player } from './game/player';
 
 @Injectable()
 export class BoardService {
-  playerId: string = '1';
+  playerId = '1';
   boards: Board[] = [];
 
   constructor() {}
@@ -33,8 +33,8 @@ export class BoardService {
   randomShips(board: Object[], len: number): Object[] {
     const ranRow = this.getRandomInt(len);
     const ranCol = this.getRandomInt(len);
-    
-    if (board[ranRow][ranCol].value == 1) {
+
+    if (board[ranRow][ranCol].value === 1) {
       return this.randomShips(board, len);
     } else {
       board[ranRow][ranCol].value = 1;
