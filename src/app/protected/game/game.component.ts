@@ -1,10 +1,12 @@
-import {Component, ViewContainerRef} from '@angular/core';
+import {Component} from '@angular/core';
+import {AngularFireDatabase} from '@angular/fire/database';
 import {NotifierService} from 'angular-notifier';
 import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../store/app.reducers';
 import {BoardService} from '../board.service';
 import {Board} from './board';
+import {map} from 'rxjs/operators';
 
 
 const BOATS_COUNT = 5;
@@ -23,17 +25,32 @@ export class GameComponent {
   playerId: string;
   gameId: string;
   isYourTurn = true;
+  items: any;
+  ref: any;
 
   constructor(
     private store: Store<fromApp.AppState>,
     private notifierService: NotifierService,
     private boardService: BoardService,
+    private db: AngularFireDatabase,
   ) {
+
     this.store.select('auth')
       .subscribe(({user, isAuthinticated}) => {
         if (isAuthinticated && !this.playerId) {
           this.playerId = user.uid;
           this.createBoards(user.uid);
+
+          const ref = db.list('games');
+          this.ref = ref;
+          this.items = ref.snapshotChanges()
+            .pipe(
+              map(changes =>
+                changes.map(c => ({key: c.payload.key, ...c.payload.val()}))
+              ),
+              map(changes => changes.filter(c => c.key === '-LVV61RP3ZEyq7zwZCb2')
+              )
+            ).subscribe(data => console.log('test db', data));
         }
       });
   }
@@ -46,7 +63,9 @@ export class GameComponent {
     const board = this.boards.find(({player}) => player.id === boardId);
     const tile = board.tiles[row][col];
     const error = this.checkValidHit(boardId, tile);
-    console.log(boardId, error);
+
+    this.ref.push({userId: this.playerId, boards: this.boards});
+
     if (error) {
       this.notifierService.show({
         message: error,
@@ -151,6 +170,7 @@ export class GameComponent {
   }
 
   get winner(): Board {
+    console.log(this.boards);
     return this.boards.find(board => board.player.score === BOATS_COUNT);
   }
 }

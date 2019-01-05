@@ -57,7 +57,7 @@ export class AuthService {
 
   handleAuth(res) {
     const { displayName, email, photoURL: photoUrl, uid } = res.user;
-    console.log(res);
+
     this.isLoggedIn = true;
     this.spinnerService.hide();
     this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl, uid }));
