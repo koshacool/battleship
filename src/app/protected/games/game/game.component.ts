@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 
 import * as fromApp from '../../../store/app.reducers';
 import {BoardService} from '../../board.service';
-import {Board} from './board';
+import {Board} from '../../../shared/board';
 import {map} from 'rxjs/operators';
 
 
@@ -134,8 +134,8 @@ export class GameComponent {
   }
 
   createBoards(userId: string) {
-    this.boardService.createBoard();
-    this.boardService.createBoard(userId);
+    // this.boardService.createBoard();
+    // this.boardService.createBoard(userId);
   }
 
   getRandomInt(len) {
@@ -166,7 +166,8 @@ export class GameComponent {
   }
 
   get boards() {
-    return this.boardService.getBoards();
+    return []
+    // return this.boardService.getBoards();
   }
 
   get winner(): Board {

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../../store/app.reducers';
-import { Game } from '../../../shared/game.interface';
+import { Game } from '../../../shared/game';
 
 const gameStatuses = {
   lost: 'lost',

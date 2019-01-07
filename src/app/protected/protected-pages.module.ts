@@ -9,8 +9,8 @@ import { GamesComponent } from './games/games.component';
 import { GameComponent } from './games/game/game.component';
 import { GamesListComponent } from './games/games-list/games-list.component';
 import { StatisticsComponent } from './statistics/statistics.component';
-import routes from '../constants/routes';
 import { BoardService } from './board.service';
+import routes from '../constants/routes';
 
 const protectedRoutes: Routes = [
   { path: routes.games, component: GamesComponent, canActivate: [AuthGuard], children: [

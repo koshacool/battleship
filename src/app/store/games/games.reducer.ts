@@ -1,5 +1,5 @@
 import * as GamesActions from './games.actions';
-import { Game } from '../../shared/game.interface';
+import { Game } from '../../shared/game';
 
 export interface State {
   games: Game[];

@@ -1,33 +1,31 @@
 import { Injectable } from '@angular/core';
-import { Board } from './game/board';
-import { Player } from './game/player';
+import { Board } from '../shared/board';
+
+const BOARD_SIZE = 5;
 
 @Injectable()
 export class BoardService {
-  playerId = '1';
-  boards: Board[] = [];
-
-  constructor() {}
-
-  createBoard(playerId: string = '1', size: number = 5) {
+  createBoard(playerId: string) {
     let tiles = [];
     // create tiles for board
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
       tiles[i] = [];
-      for (let j = 0; j < size; j++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
         tiles[i][j] = { used: false, value: 0, status: '' };
       }
     }
     // generate random ships for the board
-    for (let i = 0; i < 5; i++) {
-      tiles = this.randomShips(tiles, size);
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      tiles = this.randomShips(tiles, BOARD_SIZE);
     }
     // create board
     const board = new Board({
-      player: new Player({ id: playerId }),
+      playerId,
+      score: 0,
       tiles,
     });
-    this.boards.push(board);
+
+    return board;
   }
 
   randomShips(board: Object[], len: number): Object[] {
@@ -44,9 +42,5 @@ export class BoardService {
 
   getRandomInt(len) {
     return Math.floor(Math.random() * len);
-  }
-
-  getBoards(): Board[] {
-    return this.boards;
   }
 }
