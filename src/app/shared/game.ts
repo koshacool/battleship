@@ -1,12 +1,10 @@
 import { Board } from './board';
 
 export class Game {
-  boards: Object = {
-    player: Board,
-    computer: Board,
-  };
+  boards: Board[];
   userId: string;
   status: string;
+  turn: string;
   key: string;
   date: Date;
 

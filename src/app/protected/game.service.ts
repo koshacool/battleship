@@ -27,21 +27,24 @@ export class GameService {
     private boardService: BoardService,
     private db: AngularFireDatabase,
     private router: Router,
-  ) { }
+  ) {}
+
+  onInit(game: Game) {
+    this.game = game;
+  }
 
   createGame(userId: string) {
     const playerBoard = this.boardService.createBoard(userId);
     const computerBoard = this.boardService.createBoard('1');
-
-    // @ts-ignore
     const newGame = new Game({
-      userId,
       status: gameStatuses.notEnded,
       date: moment().format(),
-      boards: {
-        player: playerBoard,
-        computer: computerBoard,
-      }
+      turn: userId,
+      userId,
+      boards: [
+        computerBoard,
+        playerBoard,
+      ]
     });
 
     this.db.list('games')

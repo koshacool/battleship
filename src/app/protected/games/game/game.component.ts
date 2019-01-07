@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {NotifierService} from 'angular-notifier';
 import {Store} from '@ngrx/store';
@@ -7,6 +8,9 @@ import * as fromApp from '../../../store/app.reducers';
 import {BoardService} from '../../board.service';
 import {Board} from '../../../shared/board';
 import {map} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {Game} from '../../../shared/game';
+import {GameService} from '../../game.service';
 
 
 const BOATS_COUNT = 5;
@@ -21,7 +25,7 @@ const validateHit = validationConfig => {
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent {
+export class GameComponent implements OnInit {
   playerId: string;
   gameId: string;
   isYourTurn = true;
@@ -31,40 +35,48 @@ export class GameComponent {
   constructor(
     private store: Store<fromApp.AppState>,
     private notifierService: NotifierService,
-    private boardService: BoardService,
-    private db: AngularFireDatabase,
+    private route: ActivatedRoute,
+    private gameService: GameService,
   ) {
 
-    this.store.select('auth')
-      .subscribe(({user, isAuthinticated}) => {
-        if (isAuthinticated && !this.playerId) {
-          this.playerId = user.uid;
-          this.createBoards(user.uid);
-
-          const ref = db.list('games');
-          this.ref = ref;
-          this.items = ref.snapshotChanges()
-            .pipe(
-              map(changes =>
-                changes.map(c => ({key: c.payload.key, ...c.payload.val()}))
-              ),
-              map(changes => changes.filter(c => c.key === '-LVV61RP3ZEyq7zwZCb2')
-              )
-            ).subscribe(data => console.log('test db', data));
-        }
-      });
+    // this.store.select('auth')
+    //   .subscribe(({user, isAuthinticated}) => {
+    //     if (isAuthinticated && !this.playerId) {
+    //       this.playerId = user.uid;
+    //       this.createBoards(user.uid);
+    //
+    //       const ref = db.list('games');
+    //       this.ref = ref;
+    //       this.items = ref.snapshotChanges()
+    //         .pipe(
+    //           map(changes =>
+    //             changes.map(c => ({key: c.payload.key, ...c.payload.val()}))
+    //           ),
+    //           map(changes => changes.filter(c => c.key === '-LVV61RP3ZEyq7zwZCb2')
+    //           )
+    //         ).subscribe(data => console.log('test db', data));
+    //     }
+    //   });
   }
 
-  fireTorpedo(e) {
+  ngOnInit() {
+    this.route.params.subscribe(({id}) => {
+      this.store.select('games').subscribe(({games}) => {
+        const gameFromServer = games.find(({key}) => key === id);
+
+        this.gameService.onInit(new Game(gameFromServer));
+      });
+    });
+  }
+
+  fire(e) {
     const {id} = e.target;
     const row = id[0];
     const col = id[1];
     const boardId = id.slice(2);
-    const board = this.boards.find(({player}) => player.id === boardId);
+    const board = this.boards.find(({playerId}) => playerId === boardId);
     const tile = board.tiles[row][col];
-    const error = this.checkValidHit(boardId, tile);
-
-    this.ref.push({userId: this.playerId, boards: this.boards});
+    const error = this.checkValidHit(board, tile);
 
     if (error) {
       this.notifierService.show({
@@ -81,7 +93,7 @@ export class GameComponent {
         type: 'info',
       });
       board.tiles[row][col].status = 'win';
-      board.player.score++;
+      board.score++;
     } else {
       this.notifierService.show({
         message: 'OOPS! YOU MISSED THIS TIME',
@@ -105,16 +117,16 @@ export class GameComponent {
   }
 
   enemyTurn() {
-    const board = this.boards.find(({player}) => player.id === this.playerId);
-    const row = this.getRandomInt(5);
-    const col = this.getRandomInt(5);
+    const board = this.boards.find(({playerId}) => playerId !== '1');
+    const row = this.getRandomInt(BOATS_COUNT);
+    const col = this.getRandomInt(BOATS_COUNT);
 
     if (board.tiles[row][col].status) {
       return this.enemyTurn();
     } else {
       if (board.tiles[row][col].value === 1) {
         board.tiles[row][col].status = 'win';
-        board.player.score++;
+        board.score++;
       } else {
         board.tiles[row][col].status = 'fail';
       }
@@ -133,27 +145,22 @@ export class GameComponent {
     }
   }
 
-  createBoards(userId: string) {
-    // this.boardService.createBoard();
-    // this.boardService.createBoard(userId);
-  }
-
   getRandomInt(len) {
     return Math.floor(Math.random() * len);
   }
 
-  checkValidHit(boardId: string, tile: any): string {
+  checkValidHit(board: Board, tile: any): string {
     const validationConfig = [
       {
         condition: this.winner,
         error: 'Game is over',
       },
       {
-        condition: boardId === this.playerId,
+        condition: board.playerId !== '1',
         error: 'Don\'t commit suicide. You can\'t hit your own board.',
       },
       {
-        condition: !this.isYourTurn,
+        condition: this.game.turn === '1',
         error: 'It\'s not your turn to play.',
       },
       {
@@ -165,13 +172,23 @@ export class GameComponent {
     return validateHit(validationConfig);
   }
 
-  get boards() {
-    return []
-    // return this.boardService.getBoards();
+  get winner(): Board {
+    if (this.game && this.game.boards) {
+      return this.game.boards.find(({score}) => score === BOATS_COUNT);
+    }
+
+    return null;
   }
 
-  get winner(): Board {
-    console.log(this.boards);
-    return this.boards.find(board => board.player.score === BOATS_COUNT);
+  get game() {
+    return this.gameService.getGame();
+  }
+
+  get boards() {
+    return this.game.boards;
+  }
+
+  isPlayerTurn() {
+    return this.game.turn !== '1';
   }
 }

@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
-import * as moment from 'moment';
 
 import * as fromApp from '../../store/app.reducers';
 import * as gamesActions from '../../store/games/games.actions';
@@ -56,7 +55,6 @@ export class GamesComponent implements OnInit {
   }
 
   onNewGame() {
-    const date = moment().format();
-    const newGame = this.gameService.createGame(this.playerId);
+    this.gameService.createGame(this.playerId);
   }
 }
