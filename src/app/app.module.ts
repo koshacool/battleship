@@ -8,6 +8,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { NotifierModule } from 'angular-notifier';
 import { StoreModule } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
+import { MomentModule } from 'ngx-moment';
 
 import { environment } from '../environments/environment';
 import { customNotifierOptions } from './notifierConfig';
@@ -49,6 +50,7 @@ const metaReducers = environment.production ? [] : [logger];
     ProtectedPagesModule,
     PublicPagesModule,
     AppRoutingModule,
+    MomentModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
