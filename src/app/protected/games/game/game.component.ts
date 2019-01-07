@@ -3,8 +3,8 @@ import {AngularFireDatabase} from '@angular/fire/database';
 import {NotifierService} from 'angular-notifier';
 import {Store} from '@ngrx/store';
 
-import * as fromApp from '../../store/app.reducers';
-import {BoardService} from '../board.service';
+import * as fromApp from '../../../store/app.reducers';
+import {BoardService} from '../../board.service';
 import {Board} from './board';
 import {map} from 'rxjs/operators';
 

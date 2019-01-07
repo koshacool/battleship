@@ -6,7 +6,7 @@ import { MomentModule } from 'ngx-moment';
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from '../auth.service';
 import { GamesComponent } from './games/games.component';
-import { GameComponent } from './game/game.component';
+import { GameComponent } from './games/game/game.component';
 import { GamesListComponent } from './games/games-list/games-list.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import routes from '../constants/routes';
