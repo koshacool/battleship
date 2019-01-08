@@ -10,14 +10,14 @@ import { GameComponent } from './games/game/game.component';
 import { GamesListComponent } from './games/games-list/games-list.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { BoardService } from './board.service';
-import routes from '../constants/routes';
+import { ROUTES } from '../constants';
 
 const protectedRoutes: Routes = [
-  { path: routes.games, component: GamesComponent, canActivate: [AuthGuard], children: [
-    { path: routes.root, component: GamesListComponent },
-    { path: routes.game, component: GameComponent },
+  { path: ROUTES.games, component: GamesComponent, canActivate: [AuthGuard], children: [
+    { path: ROUTES.root, component: GamesListComponent },
+    { path: ROUTES.game, component: GameComponent },
   ] },
-  { path: routes.statistics, component: StatisticsComponent, canActivate: [AuthGuard] },
+  { path: ROUTES.statistics, component: StatisticsComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
@@ -38,5 +38,4 @@ const protectedRoutes: Routes = [
     BoardService,
   ]
 })
-export class ProtectedPagesModule {
-}
+export class ProtectedPagesModule {}

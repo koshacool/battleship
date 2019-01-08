@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Board } from '../shared/board';
+import { BOARD_SIZE } from '../constants';
 
-const BOARD_SIZE = 5;
 
 @Injectable()
 export class BoardService {

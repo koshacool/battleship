@@ -1,19 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {NotifierService} from 'angular-notifier';
-import {Store} from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
+import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../../store/app.reducers';
-import {BoardService} from '../../board.service';
-import {Board} from '../../../shared/board';
-import {map} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {Game} from '../../../shared/game';
-import {GameService} from '../../game.service';
+import { Board } from '../../../shared/board';
+import { Game } from '../../../shared/game';
+import { GameService } from '../../game.service';
+import { GAME_STATUSES, BOARD_SIZE } from '../../../constants';
 
 
-const BOATS_COUNT = 5;
 const validateHit = validationConfig => {
   const rule = validationConfig.find(({condition}) => condition ? true : false);
 
@@ -40,31 +36,13 @@ export class GameComponent implements OnInit {
           this.userId = user.uid;
         }
       });
-    // this.store.select('auth')
-    //   .subscribe(({user, isAuthinticated}) => {
-    //     if (isAuthinticated && !this.playerId) {
-    //       this.playerId = user.uid;
-    //       this.createBoards(user.uid);
-    //
-    //       const ref = db.list('games');
-    //       this.ref = ref;
-    //       this.items = ref.snapshotChanges()
-    //         .pipe(
-    //           map(changes =>
-    //             changes.map(c => ({key: c.payload.key, ...c.payload.val()}))
-    //           ),
-    //           map(changes => changes.filter(c => c.key === '-LVV61RP3ZEyq7zwZCb2')
-    //           )
-    //         ).subscribe(data => console.log('test db', data));
-    //     }
-    //   });
   }
 
   ngOnInit() {
     this.route.params.subscribe(({id}) => {
       this.store.select('games').subscribe(({games}) => {
         const gameFromServer = games.find(({key}) => key === id);
-        this.gameService.onInit(new Game(gameFromServer));
+        this.gameService.restoreGame(new Game(gameFromServer));
       });
     });
   }
@@ -103,10 +81,10 @@ export class GameComponent implements OnInit {
       board.tiles[row][col].used = true;
       board.tiles[row][col].value = 'X';
       this.game.turn = '1';
+      const winner = this.winner;
 
-      this.gameService.updateGame();
-
-      if (this.winner) {
+      if (winner) {
+        this.game.status = winner.playerId === this.userId ? GAME_STATUSES.win : GAME_STATUSES.lost;
         this.notifierService.show({
           message: 'You win',
           type: 'success',
@@ -114,45 +92,42 @@ export class GameComponent implements OnInit {
       } else {
         this.enemyTurn();
       }
+
+      this.gameService.updateGame();
     }
-  }
-
-  onFire(board1, board2, boardRow, boardCol) {
-    const row =  boardRow || this.getRandomInt(BOATS_COUNT);
-    const col =  boardCol || this.getRandomInt(BOATS_COUNT);
-
-
   }
 
   enemyTurn() {
     const board = this.boards.find(({playerId}) => playerId !== '1');
     const computerBoard = this.boards.find(({playerId}) => playerId === '1');
-    const row = this.getRandomInt(BOATS_COUNT);
-    const col = this.getRandomInt(BOATS_COUNT);
+    const row = this.getRandomInt(BOARD_SIZE);
+    const col = this.getRandomInt(BOARD_SIZE);
 
     if (board.tiles[row][col].status) {
       return this.enemyTurn();
-    } else {
-      if (board.tiles[row][col].value === 1) {
-        board.tiles[row][col].status = 'win';
-        computerBoard.score++;
-      } else {
-        board.tiles[row][col].status = 'fail';
-      }
-
-      board.tiles[row][col].used = true;
-      board.tiles[row][col].value = 'X';
-      this.game.turn = this.userId;
-
-      this.gameService.updateGame();
-
-      if (this.winner) {
-        this.notifierService.show({
-          message: 'Computer win',
-          type: 'error',
-        });
-      }
     }
+
+    if (board.tiles[row][col].value === 1) {
+      board.tiles[row][col].status = 'win';
+      computerBoard.score++;
+    } else {
+      board.tiles[row][col].status = 'fail';
+    }
+
+    board.tiles[row][col].used = true;
+    board.tiles[row][col].value = 'X';
+    this.game.turn = this.userId;
+    const winner = this.winner;
+
+    if (winner) {
+      this.game.status = winner.playerId === this.userId ? GAME_STATUSES.win : GAME_STATUSES.lost;
+      this.notifierService.show({
+        message: 'Computer win',
+        type: 'error',
+      });
+    }
+
+    this.gameService.updateGame();
   }
 
   getRandomInt(len) {
@@ -162,7 +137,7 @@ export class GameComponent implements OnInit {
   checkValidHit(board: Board, tile: any): string {
     const validationConfig = [
       {
-        condition: this.winner,
+        condition: this.game.status !== GAME_STATUSES.notEnded || this.winner,
         error: 'Game is over',
       },
       {
@@ -182,9 +157,13 @@ export class GameComponent implements OnInit {
     return validateHit(validationConfig);
   }
 
+  isPlayerTurn() {
+    return this.game.turn === this.userId;
+  }
+
   get winner(): Board {
     if (this.game && this.game.boards) {
-      return this.game.boards.find(({score}) => score === BOATS_COUNT);
+      return this.game.boards.find(({score}) => score === BOARD_SIZE);
     }
 
     return null;
@@ -196,9 +175,5 @@ export class GameComponent implements OnInit {
 
   get boards() {
     return this.game.boards;
-  }
-
-  isPlayerTurn() {
-    return this.game.turn === this.userId;
   }
 }

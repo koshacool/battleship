@@ -1,22 +1,12 @@
 import { Injectable } from '@angular/core';
-import {AngularFireDatabase} from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
-import {BoardService} from './board.service';
-import {Game} from '../shared/game';
-import {Router} from '@angular/router';
-import {Board} from '../shared/board';
 
-const gameStatuses = {
-  lost: 'lost',
-  win: 'win',
-  notEnded: 'notEnded',
-};
+import { BoardService } from './board.service';
+import { Game } from '../shared/game';
+import { GAME_STATUSES } from '../constants';
 
-const textConfig = {
-  [gameStatuses.win]: 'You won this game',
-  [gameStatuses.lost]: 'You lost this game',
-  [gameStatuses.notEnded]: 'Game not ended',
-};
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +23,7 @@ export class GameService {
     this.gameRef = this.db.list('games');
   }
 
-  onInit(game: Game) {
+  restoreGame(game: Game) {
     this.game = game;
   }
 
@@ -41,7 +31,7 @@ export class GameService {
     const playerBoard = this.boardService.createBoard(userId);
     const computerBoard = this.boardService.createBoard('1');
     const newGame = new Game({
-      status: gameStatuses.notEnded,
+      status: GAME_STATUSES.notEnded,
       date: moment().format(),
       turn: userId,
       userId,
@@ -57,7 +47,7 @@ export class GameService {
   }
 
   updateGame() {
-    const { key, ...game } = this.game;
+    const {key, ...game} = this.game;
     this.gameRef.update(key, game);
   }
 

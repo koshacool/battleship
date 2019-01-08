@@ -3,7 +3,7 @@ import { Game } from '../../shared/game';
 
 export interface State {
   games: Game[];
-};
+}
 
 const initialState: State = {
   games: [],
