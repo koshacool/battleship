@@ -2,7 +2,8 @@ export default {
   root: '',
   login: 'login',
   register: 'register',
-  game: 'game',
+  games: 'games',
+  game: ':id',
   statistics: 'statistics',
   notFound: '**',
 };

@@ -1,6 +1,7 @@
-export class Player {
-  id: string;
-  score = 0;
+export class Board {
+  playerId: string;
+  score: number;
+  tiles: Object[];
 
   constructor(values: Object = {}) {
     Object.assign(this, values);

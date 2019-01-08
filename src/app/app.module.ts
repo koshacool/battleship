@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+// import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { NotifierModule } from 'angular-notifier';
-import { StoreModule, ActionReducer, State } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
+import { MomentModule } from 'ngx-moment';
 
 import { environment } from '../environments/environment';
 import { customNotifierOptions } from './notifierConfig';
@@ -38,7 +40,8 @@ const metaReducers = environment.production ? [] : [logger];
     BrowserModule,
     Ng4LoadingSpinnerModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    // AngularFirestoreModule,
+    AngularFireDatabaseModule,
     AngularFireAuthModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     NotifierModule.withConfig(customNotifierOptions),
@@ -47,6 +50,7 @@ const metaReducers = environment.production ? [] : [logger];
     ProtectedPagesModule,
     PublicPagesModule,
     AppRoutingModule,
+    MomentModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
