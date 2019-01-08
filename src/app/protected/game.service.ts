@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {BoardService} from './board.service';
 import {Game} from '../shared/game';
 import {Router} from '@angular/router';
+import {Board} from '../shared/board';
 
 const gameStatuses = {
   lost: 'lost',
@@ -22,12 +23,15 @@ const textConfig = {
 })
 export class GameService {
   game: Game;
+  gameRef: any;
 
   constructor(
     private boardService: BoardService,
     private db: AngularFireDatabase,
     private router: Router,
-  ) {}
+  ) {
+    this.gameRef = this.db.list('games');
+  }
 
   onInit(game: Game) {
     this.game = game;
@@ -47,9 +51,14 @@ export class GameService {
       ]
     });
 
-    this.db.list('games')
+    this.gameRef
       .push(newGame)
       .then(res => this.router.navigate(['/games', res.key]));
+  }
+
+  updateGame() {
+    const { key, ...game } = this.game;
+    this.gameRef.update(key, game);
   }
 
   getGame() {

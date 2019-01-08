@@ -4,8 +4,8 @@
       <h1 class="title">Ready to sink some battleships?</h1>
 
       <div class="has-text-centered">
-        <span class="tag is-warning" *ngIf="isPlayerTurn">Your turn.</span>
-        <span class="tag is-danger" *ngIf="!isPlayerTurn">Computer turn.</span>
+        <span class="tag is-warning" *ngIf="isPlayerTurn()">Your turn.</span>
+        <span class="tag is-danger" *ngIf="!isPlayerTurn()">Computer turn.</span>
       </div>
       <section *ngIf="winner" class="notification is-success has-text-centered" style="color: green">
         <h1>

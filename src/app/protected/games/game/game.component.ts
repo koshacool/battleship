@@ -26,11 +26,7 @@ const validateHit = validationConfig => {
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  playerId: string;
-  gameId: string;
-  isYourTurn = true;
-  items: any;
-  ref: any;
+  userId: string;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -38,7 +34,12 @@ export class GameComponent implements OnInit {
     private route: ActivatedRoute,
     private gameService: GameService,
   ) {
-
+    this.store.select('auth')
+      .subscribe(({user, isAuthinticated}) => {
+        if (isAuthinticated && !this.userId) {
+          this.userId = user.uid;
+        }
+      });
     // this.store.select('auth')
     //   .subscribe(({user, isAuthinticated}) => {
     //     if (isAuthinticated && !this.playerId) {
@@ -63,7 +64,6 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe(({id}) => {
       this.store.select('games').subscribe(({games}) => {
         const gameFromServer = games.find(({key}) => key === id);
-
         this.gameService.onInit(new Game(gameFromServer));
       });
     });
@@ -75,6 +75,7 @@ export class GameComponent implements OnInit {
     const col = id[1];
     const boardId = id.slice(2);
     const board = this.boards.find(({playerId}) => playerId === boardId);
+    const playerBoard = this.boards.find(({playerId}) => playerId !== '1');
     const tile = board.tiles[row][col];
     const error = this.checkValidHit(board, tile);
 
@@ -83,41 +84,49 @@ export class GameComponent implements OnInit {
         message: error,
         type: 'error',
       });
-
-      return;
-    }
-
-    if (tile.value === 1) {
-      this.notifierService.show({
-        message: 'You got this. YOU SANK A SHIP!',
-        type: 'info',
-      });
-      board.tiles[row][col].status = 'win';
-      board.score++;
     } else {
-      this.notifierService.show({
-        message: 'OOPS! YOU MISSED THIS TIME',
-        type: 'warning',
-      });
-      board.tiles[row][col].status = 'fail';
-    }
+      if (tile.value === 1) {
+        this.notifierService.show({
+          message: 'You got this. YOU SANK A SHIP!',
+          type: 'info',
+        });
+        board.tiles[row][col].status = 'win';
+        playerBoard.score++;
+      } else {
+        this.notifierService.show({
+          message: 'OOPS! YOU MISSED THIS TIME',
+          type: 'warning',
+        });
+        board.tiles[row][col].status = 'fail';
+      }
 
-    board.tiles[row][col].used = true;
-    board.tiles[row][col].value = 'X';
+      board.tiles[row][col].used = true;
+      board.tiles[row][col].value = 'X';
+      this.game.turn = '1';
 
-    if (this.winner) {
-      this.notifierService.show({
-        message: 'You win',
-        type: 'success',
-      });
-    } else {
-      this.isYourTurn = false;
-      this.enemyTurn();
+      this.gameService.updateGame();
+
+      if (this.winner) {
+        this.notifierService.show({
+          message: 'You win',
+          type: 'success',
+        });
+      } else {
+        this.enemyTurn();
+      }
     }
+  }
+
+  onFire(board1, board2, boardRow, boardCol) {
+    const row =  boardRow || this.getRandomInt(BOATS_COUNT);
+    const col =  boardCol || this.getRandomInt(BOATS_COUNT);
+
+
   }
 
   enemyTurn() {
     const board = this.boards.find(({playerId}) => playerId !== '1');
+    const computerBoard = this.boards.find(({playerId}) => playerId === '1');
     const row = this.getRandomInt(BOATS_COUNT);
     const col = this.getRandomInt(BOATS_COUNT);
 
@@ -126,13 +135,16 @@ export class GameComponent implements OnInit {
     } else {
       if (board.tiles[row][col].value === 1) {
         board.tiles[row][col].status = 'win';
-        board.score++;
+        computerBoard.score++;
       } else {
         board.tiles[row][col].status = 'fail';
       }
 
       board.tiles[row][col].used = true;
       board.tiles[row][col].value = 'X';
+      this.game.turn = this.userId;
+
+      this.gameService.updateGame();
 
       if (this.winner) {
         this.notifierService.show({
@@ -140,8 +152,6 @@ export class GameComponent implements OnInit {
           type: 'error',
         });
       }
-
-      this.isYourTurn = true;
     }
   }
 
@@ -189,6 +199,6 @@ export class GameComponent implements OnInit {
   }
 
   isPlayerTurn() {
-    return this.game.turn !== '1';
+    return this.game.turn === this.userId;
   }
 }
