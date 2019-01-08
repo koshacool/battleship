@@ -1546,7 +1546,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  statistics works!\n</p>\n"
+module.exports = "<div *ngIf=\"chart\">\n  <canvas id=\"canvas\">{{ chart }}</canvas>\n</div>\n"
 
 /***/ }),
 
@@ -1562,12 +1562,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StatisticsComponent", function() { return StatisticsComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/src/chart.js");
+/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chart_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var _angular_fire_database__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire/database */ "./node_modules/@angular/fire/database/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../store/games/games.actions */ "./src/app/store/games/games.actions.ts");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../constants */ "./src/app/constants/index.ts");
 
 
+
+
+
+
+
+
+var getChartConfig = function (data) { return ({
+    type: 'pie',
+    data: {
+        labels: ['WON', 'LOST', 'NOT FINISHED'],
+        datasets: [{
+                label: '% of Games',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                ],
+                borderWidth: 1
+            }]
+    },
+    options: {
+        legend: {
+            display: true,
+        },
+    }
+}); };
 var StatisticsComponent = /** @class */ (function () {
-    function StatisticsComponent() {
+    function StatisticsComponent(store, db) {
+        var _this = this;
+        this.store = store;
+        this.db = db;
+        var gamesDbRef = db.list('games');
+        this.store.select('auth')
+            .subscribe(function (_a) {
+            var user = _a.user, isAuthinticated = _a.isAuthinticated;
+            if (isAuthinticated) {
+                gamesDbRef.snapshotChanges()
+                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (changes) { return changes
+                    .map(function (c) { return (tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({ key: c.payload.key }, c.payload.val())); })
+                    // @ts-ignore
+                    .filter(function (c) { return c.userId === user.uid; }); }))
+                    .subscribe(function (games) { return _this.store.dispatch(new _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__["Update"](games)); });
+            }
+        });
     }
     StatisticsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.store.select('games')
+            .subscribe(function (_a) {
+            var games = _a.games;
+            var wonGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].win; }).length;
+            var lostGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].lost; }).length;
+            var notEndedGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].notEnded; }).length;
+            _this.chart = new chart_js__WEBPACK_IMPORTED_MODULE_2__["Chart"]('canvas', getChartConfig([wonGames, lostGames, notEndedGames]));
+        });
     };
     StatisticsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1575,7 +1639,8 @@ var StatisticsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./statistics.component.html */ "./src/app/protected/statistics/statistics.component.html"),
             styles: [__webpack_require__(/*! ./statistics.component.css */ "./src/app/protected/statistics/statistics.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_3__["Store"],
+            _angular_fire_database__WEBPACK_IMPORTED_MODULE_4__["AngularFireDatabase"]])
     ], StatisticsComponent);
     return StatisticsComponent;
 }());
