@@ -5,11 +5,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthModule } from './auth/auth.module';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import routes from '../constants/routes';
+import { ROUTES } from '../constants';
 
 const publicRoutes: Routes = [
-  { path: routes.root, component: HomeComponent },
-  { path: routes.notFound, component: NotFoundComponent},
+  { path: ROUTES.root, component: HomeComponent },
+  { path: ROUTES.notFound, component: NotFoundComponent},
 ];
 
 @NgModule({
