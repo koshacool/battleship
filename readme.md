@@ -1,33 +1,31 @@
-# TODO List
+# Battleship
 
-Todo list is a system for getting organized and staying productive. It may seem complicated on the outside, but the end goal is to spend less time doing the things you have to do so you have more time for the things you want to do.
-Todo list is a simple task manager for everyone. It helps you organized your time.
+Battleship (also Battleships or Sea Battle[1]) is a guessing game for two players. It is played on ruled grids (paper or board) on which each players fleet of ships (including battleships) are marked. The locations of the fleets are concealed from the other player. Players alternate turns calling "shots" at the other player's ships, and the objective of the game is to destroy the opposing player's fleet.
 
-[Demo](https://koshacool.github.io/ToDoList/)
+[Demo](https://koshacool.github.io/battleship/)
 
 ## Tech stack
 
- - Pure Javascript
- - [Sass](https://sass-lang.com/)
- - [Webpack](https://webpack.js.org/)
- - [Jest](https://jestjs.io/)
+ - Angular 
+ - Rxjs 
+ - Firebase 
+ - Typescript 
+ - Bootstrap
+ - @ngrx/store
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
-See deployment for notes on how to deploy the project on a live system.
-
-
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Installation and usage
 
 Clone the repo 
 
 ```
-$ git clone git@github.com:koshacool/ToDoList.git yourFolderName
+$ git clone git@github.com:koshacool/battleship.git yourFolderName
 $ cd yourFolderName
 $ npm i
-$ npm run start
+$ npm start
 ```
 
 ### Running the tests
@@ -41,9 +39,9 @@ $ npm run test
 
 We use [Travis Ci](https://travis-ci.org/) for deployment. 
 After merge changes into master branch the app will be automatically deployed to server 
-([ToDoList Demo](https://koshacool.github.io/ToDoList/)).
-### Contributing
+([ToDoList Demo](https://koshacool.github.io/battleship/)).
 
+### Contributing
 Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ### Authors
@@ -52,11 +50,13 @@ Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduc
 
 ### Teachers
 
-* **[Serhii Yakymuk](https://github.com/serhii-yakymuk)**
+- Nazar Lazorko
+- Andrii Postoliuk
 
-### Mockups
-
-* **[Mockflow service](https://wireframepro.mockflow.com/view/M9d1625f8b26756fe401a6b8fa81b3d8a1539193727361#/page/477987137bbc45fb9c42e2f0a9fff10f)**
+### TODO
+- Add second real pleyer
+- Improve game's logic (add different ships, add animation, etc)
+- Add filters to games list
 
 ### Issue template
 
@@ -65,11 +65,6 @@ Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduc
 ### Pull Request
 
 * **[template](.github/PULL_REQUEST_TEMPLATE.md)**
-
-
-### Additional links
-
-[FRONT-CAMP “facebook” page](https://www.facebook.com/groups/270300106928894/)
 
 ### License
 

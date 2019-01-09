@@ -3,18 +3,7 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../../store/app.reducers';
 import { Game } from '../../../shared/game';
-
-const gameStatuses = {
-  lost: 'lost',
-  win: 'win',
-  notEnded: 'notEnded',
-};
-
-const textConfig = {
-  [gameStatuses.win]: 'You won this game',
-  [gameStatuses.lost]: 'You lost this game',
-  [gameStatuses.notEnded]: 'Game not ended',
-};
+import { GAME_STATUSES_TEXT } from '../../../constants';
 
 @Component({
   selector: 'app-games-list',
@@ -36,6 +25,6 @@ export class GamesListComponent implements OnInit {
   }
 
   getStatus(game) {
-    return textConfig[game.status];
+    return GAME_STATUSES_TEXT[game.status];
   }
 }
