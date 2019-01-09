@@ -62,7 +62,7 @@ export class AuthService {
     this.spinnerService.hide();
     this.store.dispatch(new authActions.Signup({ displayName, email, photoUrl, uid }));
     this.getToken();
-    this.router.navigate(['game']);
+    this.router.navigate(['/']);
   }
 
   getToken() {
@@ -111,6 +111,6 @@ export class AuthService {
 
     this.isLoggedIn = false;
     this.store.dispatch(new authActions.Logout());
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 }

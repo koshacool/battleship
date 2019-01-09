@@ -1,3 +1,17 @@
-<p>
-  home works!
-</p>
+<div class="container">
+  <div class="text-center">
+    <h2>It's a simple battleship game!</h2>
+    <div *ngIf="(auth$ | async).isAuthinticated; else elseBlock">
+      <a type="button" routerLink="/games" class="btn btn-outline-success">
+        PLAY
+      </a>
+    </div>
+    <ng-template #elseBlock>
+      <h3>To play need to authorize</h3>
+      <a type="button" routerLink="/login" class="btn btn-outline-success">
+        LOGIN
+      </a>
+    </ng-template>
+  </div>
+</div>
+
