@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 import { AuthService } from 'src/app/auth.service';
 import { formControlStatuses } from '../formControlStatuses';
@@ -12,7 +14,8 @@ import * as fromApp from '../../../store/app.reducers';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
   loginForm: FormGroup;
   isSubmitted: Boolean = false;
 
@@ -26,13 +29,20 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.select('auth').subscribe(
+    this.store.select('auth')
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(
       ({ isAuthinticated }) => {
         if (isAuthinticated) {
           this.router.navigate(['/']);
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   createForm() {

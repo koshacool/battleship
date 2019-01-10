@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import * as fromApp from '../../../store/app.reducers';
 import { Board } from '../../../shared/board';
@@ -21,7 +23,8 @@ const validateHit = validationConfig => {
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.css']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
   userId: string;
 
   constructor(
@@ -31,6 +34,7 @@ export class GameComponent implements OnInit {
     private gameService: GameService,
   ) {
     this.store.select('auth')
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(({user, isAuthinticated}) => {
         if (isAuthinticated && !this.userId) {
           this.userId = user.uid;
@@ -39,12 +43,20 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(({id}) => {
+    this.route.params
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(({id}) => {
       this.store.select('games').subscribe(({games}) => {
         const gameFromServer = games.find(({key}) => key === id);
         this.gameService.restoreGame(new Game(gameFromServer));
       });
     });
+  }
+
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   fire(e) {
