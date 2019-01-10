@@ -348,7 +348,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FwcC5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
@@ -359,7 +359,7 @@ module.exports = "\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJz
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-header></app-header>\n<router-outlet></router-outlet>\n<ng4-loading-spinner> </ng4-loading-spinner>\n<notifier-container></notifier-container>\n"
+module.exports = "<app-header></app-header>\n<router-outlet></router-outlet>\n<ng4-loading-spinner> </ng4-loading-spinner>\n<notifier-container></notifier-container>\n<app-footer></app-footer>\n"
 
 /***/ }),
 
@@ -430,11 +430,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _header_header_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./header/header.component */ "./src/app/header/header.component.ts");
 /* harmony import */ var _public_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./public/not-found/not-found.component */ "./src/app/public/not-found/not-found.component.ts");
 /* harmony import */ var _store_app_reducers__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./store/app.reducers */ "./src/app/store/app.reducers.ts");
+/* harmony import */ var _footer_footer_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./footer/footer.component */ "./src/app/footer/footer.component.ts");
 
 
 
 
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
+
 
 
 
@@ -467,6 +469,7 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_18__["AppComponent"],
                 _header_header_component__WEBPACK_IMPORTED_MODULE_19__["HeaderComponent"],
                 _public_not_found_not_found_component__WEBPACK_IMPORTED_MODULE_20__["NotFoundComponent"],
+                _footer_footer_component__WEBPACK_IMPORTED_MODULE_22__["FooterComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -696,6 +699,62 @@ __webpack_require__.r(__webpack_exports__);
     statistics: 'statistics',
     notFound: '**',
 });
+
+
+/***/ }),
+
+/***/ "./src/app/footer/footer.component.css":
+/*!*********************************************!*\
+  !*** ./src/app/footer/footer.component.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".page-footer {\n  position: fixed;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  text-align: center;\n}\n\n.page-footer div {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  align-items: center;\n}\n\n.page-footer h5, h6 {\n  /*display: inline-block;*/\n}\n\n.page-footer a {\n  color: black;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZm9vdGVyL2Zvb3Rlci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZ0JBQWdCO0VBQ2hCLFFBQVE7RUFDUixVQUFVO0VBQ1YsWUFBWTtFQUNaLG1CQUFtQjtDQUNwQjs7QUFFRDtFQUNFLGNBQWM7RUFDZCxnQkFBZ0I7RUFDaEIsNEJBQTRCO0VBQzVCLG9CQUFvQjtDQUNyQjs7QUFFRDtFQUNFLDBCQUEwQjtDQUMzQjs7QUFFRDtFQUNFLGFBQWE7Q0FDZCIsImZpbGUiOiJzcmMvYXBwL2Zvb3Rlci9mb290ZXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5wYWdlLWZvb3RlciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgbGVmdDogMDtcbiAgYm90dG9tOiAwO1xuICB3aWR0aDogMTAwJTtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuXG4ucGFnZS1mb290ZXIgZGl2IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC13cmFwOiB3cmFwO1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGZsZXgtc3RhcnQ7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG59XG5cbi5wYWdlLWZvb3RlciBoNSwgaDYge1xuICAvKmRpc3BsYXk6IGlubGluZS1ibG9jazsqL1xufVxuXG4ucGFnZS1mb290ZXIgYSB7XG4gIGNvbG9yOiBibGFjaztcbn1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/footer/footer.component.html":
+/*!**********************************************!*\
+  !*** ./src/app/footer/footer.component.html ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<footer class=\"page-footer font-small bg-light\">\n  <div class=\"text-left py-3 ml-2\">\n    <h6 class=\"col-5\">\n      2019 BATTLESHIP\n    </h6>\n    <h5 class=\"col-5\">\n      <a href=\"https://github.com/koshacool\">R. Kushytskyy</a>\n    </h5>\n  </div>\n</footer>\n"
+
+/***/ }),
+
+/***/ "./src/app/footer/footer.component.ts":
+/*!********************************************!*\
+  !*** ./src/app/footer/footer.component.ts ***!
+  \********************************************/
+/*! exports provided: FooterComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FooterComponent", function() { return FooterComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+
+
+var FooterComponent = /** @class */ (function () {
+    function FooterComponent() {
+    }
+    FooterComponent.prototype.ngOnInit = function () {
+    };
+    FooterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-footer',
+            template: __webpack_require__(/*! ./footer.component.html */ "./src/app/footer/footer.component.html"),
+            styles: [__webpack_require__(/*! ./footer.component.css */ "./src/app/footer/footer.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], FooterComponent);
+    return FooterComponent;
+}());
+
 
 
 /***/ }),
@@ -1306,7 +1365,7 @@ var GameComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Byb3RlY3RlZC9nYW1lcy9nYW1lcy1saXN0L2dhbWVzLWxpc3QuY29tcG9uZW50LmNzcyJ9 */"
+module.exports = ".games-list {\n  overflow-y: auto;\n  height: calc(100vh - 80px - 120px);\n}\n\n@media all and (min-width: 128px) and (max-width: 468px) {\n  .games-list {\n    height: calc(100vh - 80px - 30px);\n  }\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvdGVjdGVkL2dhbWVzL2dhbWVzLWxpc3QvZ2FtZXMtbGlzdC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsaUJBQWlCO0VBQ2pCLG1DQUFtQztDQUNwQzs7QUFFRDtFQUNFO0lBQ0Usa0NBQWtDO0dBQ25DO0NBQ0YiLCJmaWxlIjoic3JjL2FwcC9wcm90ZWN0ZWQvZ2FtZXMvZ2FtZXMtbGlzdC9nYW1lcy1saXN0LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZ2FtZXMtbGlzdCB7XG4gIG92ZXJmbG93LXk6IGF1dG87XG4gIGhlaWdodDogY2FsYygxMDB2aCAtIDgwcHggLSAxMjBweCk7XG59XG5cbkBtZWRpYSBhbGwgYW5kIChtaW4td2lkdGg6IDEyOHB4KSBhbmQgKG1heC13aWR0aDogNDY4cHgpIHtcbiAgLmdhbWVzLWxpc3Qge1xuICAgIGhlaWdodDogY2FsYygxMDB2aCAtIDgwcHggLSAzMHB4KTtcbiAgfVxufVxuIl19 */"
 
 /***/ }),
 
@@ -1317,7 +1376,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\" [class.text-danger]=\"game.status === 'lost'\"\n        [class.text-success]=\"game.status === 'win'\">\n        {{getStatus(game)}}\n      </h4>\n\n      <p class=\"card-text\">\n        {{game.date | amTimeAgo}}\n      </p>\n\n      <a [routerLink]=\"[game.key]\" class=\"card-link\" *ngIf=\"game.status === 'notEnded'\">\n        Continue game\n      </a>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"games-list\">\n  <div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n    <div class=\"card\">\n      <div class=\"card-body\">\n        <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\"\n            [class.text-danger]=\"game.status === 'lost'\"\n            [class.text-success]=\"game.status === 'win'\">\n          {{getStatus(game)}}\n        </h4>\n\n        <p class=\"card-text\">\n          {{game.date | amTimeAgo}}\n        </p>\n\n        <a [routerLink]=\"[game.key]\" class=\"card-link\" *ngIf=\"game.status === 'notEnded'\">\n          Continue game\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
