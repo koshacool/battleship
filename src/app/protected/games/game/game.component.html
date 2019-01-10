@@ -1,42 +1,38 @@
+<div class="container" *ngIf="game">
+  <div class="has-text-centered" *ngIf="!winner">
+    <h2 class="notification is-success" style="color: green" *ngIf="isPlayerTurn()">
+      Your turn
+    </h2>
+    <h2 class="notification is-success" style="color: green" *ngIf="!isPlayerTurn()">
+      Computer turn
+    </h2>
+  </div>
+  <section *ngIf="winner" class="notification is-success" style="color: green">
+    <h1>
+      {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!
+    </h1>
+  </section>
 
-    <div class="container" *ngIf="game">
-      <div class="has-text-centered">
-        <span class="tag is-warning" *ngIf="isPlayerTurn()">Your turn.</span>
-        <span class="tag is-danger" *ngIf="!isPlayerTurn()">Computer turn.</span>
-      </div>
-      <section *ngIf="winner" class="notification is-success has-text-centered" style="color: green">
-        <h1>
-          {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!
-        </h1>
-      </section>
-
-      <div class="columns" >
-        <div class="column has-text-centered" *ngFor="let board of boards">
-          <h5>
-            <span class="tag is-info" *ngIf="board.playerId !== '1'; else elseBlock">
-              Your field <strong>SCORE: {{ board.score }}</strong>
-            </span>
-            <ng-template #elseBlock>
-              <span class="tag is-info">
-                Enemy field <strong>SCORE: {{ board.score }}</strong>
-              </span>
-            </ng-template>
-          </h5>
-          <table class="is-bordered" [style.opacity]="board.playerId === '1' ? 1 : 0.5">
-            <tr *ngFor="let row of board.tiles; let j = index">
-              <td
-                *ngFor="let col of row; let k = index"
-                (click)="fire($event)"
-                [style.background-color]="col.used ? '' : 'transparent'"
-                [class.win]="col.status === 'win'" [class.fail]="col.status !== 'win'"
-                class="battleship-tile"
-                id="{{j}}{{k}}{{board.playerId}}"
-              >
-                {{ col.value == "X" ? "X" : "💀" }}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+  <div class="game-boards">
+    <div class="board mr-3" *ngFor="let board of boards">
+      <h5>
+        <span *ngIf="board.playerId !== '1'; else elseBlock">
+          Your field <strong>SCORE: {{ board.score }}</strong>
+        </span>
+        <ng-template #elseBlock>
+          <span>
+            Enemy field <strong>SCORE: {{ board.score }}</strong>
+          </span>
+        </ng-template>
+      </h5>
+      <table [style.opacity]="board.playerId === '1' ? 1 : 0.5">
+        <tr *ngFor="let row of board.tiles; let j = index">
+          <td *ngFor="let col of row; let k = index" (click)="fire($event)" [class.win]="col.status === 'win'"
+            [class.fail]="col.status === 'fail'" class="battleship-tile" id="{{j}}{{k}}{{board.playerId}}">
+            {{ col.value == "X" ? "X" : "💀" }}
+          </td>
+        </tr>
+      </table>
     </div>
-  
+  </div>
+</div>

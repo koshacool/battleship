@@ -12,13 +12,7 @@ body {
 
 .scroll {
   overflow-y: auto;
-  height: calc(100vh - 80px - 120px);
-}
-
-@media all and (min-width: 128px) and (max-width: 468px) {
-  .scroll {
-    height: calc(100vh - 80px - 30px);
-  }
+  height: calc(100vh - 80px - 90px);
 }
 
 
