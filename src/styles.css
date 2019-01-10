@@ -3,4 +3,36 @@
 
 body {
   overflow: hidden;
+  transition: all .2s;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.scroll {
+  overflow-y: auto;
+  height: calc(100vh - 80px - 90px);
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 2.5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(9, 9, 9, .1);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, .2);
 }

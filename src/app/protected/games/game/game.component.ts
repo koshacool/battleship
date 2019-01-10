@@ -102,7 +102,7 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'success',
         });
       } else {
-        this.enemyTurn();
+        setTimeout(this.enemyTurn.bind(this), 200);
       }
 
       this.gameService.updateGame();

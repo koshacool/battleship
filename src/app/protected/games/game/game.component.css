@@ -1,27 +1,39 @@
-.content table td, .content table th {
+.game-boards {
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+table td,  table th {
   border: 1px solid #dbdbdb;
   padding: 0.5em 0.75em;
   vertical-align: middle;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   text-align: center;
 }
-.content table {
-width: 80%;
-margin: 0 auto;
-}
-.content table tr:hover {
-  background-color: transparent;
-}
-.battleship-tile:hover {
-cursor: pointer;
+
+table {
+  margin: 0 auto;
 }
 
-.win {
+.battleship-tile:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
+
+.battleship-tile:active {
+  background-color: transparent;
+}
+
+.win, .win:hover {
   background-color: #23d160;
   color: #fff;
 }
 
-.fail {
+.fail, .fail:hover {
   background-color: #ff3860;
   color: #fff;
 }
