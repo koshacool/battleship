@@ -675,7 +675,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var BOARD_SIZE = 5;
+var BOARD_SIZE = 10;
 
 
 
@@ -710,7 +710,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".page-footer {\n  position: fixed;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  text-align: center;\n}\n\n.page-footer div {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  align-items: center;\n}\n\n.page-footer h5, h6 {\n  /*display: inline-block;*/\n}\n\n.page-footer a {\n  color: black;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZm9vdGVyL2Zvb3Rlci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZ0JBQWdCO0VBQ2hCLFFBQVE7RUFDUixVQUFVO0VBQ1YsWUFBWTtFQUNaLG1CQUFtQjtDQUNwQjs7QUFFRDtFQUNFLGNBQWM7RUFDZCxnQkFBZ0I7RUFDaEIsNEJBQTRCO0VBQzVCLG9CQUFvQjtDQUNyQjs7QUFFRDtFQUNFLDBCQUEwQjtDQUMzQjs7QUFFRDtFQUNFLGFBQWE7Q0FDZCIsImZpbGUiOiJzcmMvYXBwL2Zvb3Rlci9mb290ZXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5wYWdlLWZvb3RlciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgbGVmdDogMDtcbiAgYm90dG9tOiAwO1xuICB3aWR0aDogMTAwJTtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuXG4ucGFnZS1mb290ZXIgZGl2IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC13cmFwOiB3cmFwO1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGZsZXgtc3RhcnQ7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG59XG5cbi5wYWdlLWZvb3RlciBoNSwgaDYge1xuICAvKmRpc3BsYXk6IGlubGluZS1ibG9jazsqL1xufVxuXG4ucGFnZS1mb290ZXIgYSB7XG4gIGNvbG9yOiBibGFjaztcbn1cbiJdfQ== */"
+module.exports = ".page-footer {\n  position: fixed;\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  text-align: center;\n}\n\n.page-footer div {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: flex-start;\n  align-items: center;\n}\n\n.page-footer a {\n  color: black;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZm9vdGVyL2Zvb3Rlci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsZ0JBQWdCO0VBQ2hCLFFBQVE7RUFDUixVQUFVO0VBQ1YsWUFBWTtFQUNaLG1CQUFtQjtDQUNwQjs7QUFFRDtFQUNFLGNBQWM7RUFDZCxnQkFBZ0I7RUFDaEIsNEJBQTRCO0VBQzVCLG9CQUFvQjtDQUNyQjs7QUFFRDtFQUNFLGFBQWE7Q0FDZCIsImZpbGUiOiJzcmMvYXBwL2Zvb3Rlci9mb290ZXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5wYWdlLWZvb3RlciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgbGVmdDogMDtcbiAgYm90dG9tOiAwO1xuICB3aWR0aDogMTAwJTtcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xufVxuXG4ucGFnZS1mb290ZXIgZGl2IHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC13cmFwOiB3cmFwO1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGZsZXgtc3RhcnQ7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG59XG5cbi5wYWdlLWZvb3RlciBhIHtcbiAgY29sb3I6IGJsYWNrO1xufVxuIl19 */"
 
 /***/ }),
 
@@ -721,7 +721,7 @@ module.exports = ".page-footer {\n  position: fixed;\n  left: 0;\n  bottom: 0;\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<footer class=\"page-footer font-small bg-light\">\n  <div class=\"text-left py-3 ml-2\">\n    <h6 class=\"col-5\">\n      2019 BATTLESHIP\n    </h6>\n    <h5 class=\"col-5\">\n      <a href=\"https://github.com/koshacool\">R. Kushytskyy</a>\n    </h5>\n  </div>\n</footer>\n"
+module.exports = "<footer class=\"page-footer font-small bg-light\">\n  <div class=\"text-left py-2 ml-2\">\n    <h6 class=\"col-5\">\n      2019 BATTLESHIP\n    </h6>\n    <h5 class=\"col-5\">\n      <a href=\"https://github.com/koshacool\">R. Kushytskyy</a>\n    </h5>\n  </div>\n</footer>\n"
 
 /***/ }),
 
@@ -1109,7 +1109,7 @@ var GameService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".content table td, .content table th {\n  border: 1px solid #dbdbdb;\n  padding: 0.5em 0.75em;\n  vertical-align: middle;\n  height: 50px;\n  text-align: center;\n}\n.content table {\nwidth: 80%;\nmargin: 0 auto;\n}\n.content table tr:hover {\n  background-color: transparent;\n}\n.battleship-tile:hover {\ncursor: pointer;\n}\n.win {\n  background-color: #23d160;\n  color: #fff;\n}\n.fail {\n  background-color: #ff3860;\n  color: #fff;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvdGVjdGVkL2dhbWVzL2dhbWUvZ2FtZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsMEJBQTBCO0VBQzFCLHNCQUFzQjtFQUN0Qix1QkFBdUI7RUFDdkIsYUFBYTtFQUNiLG1CQUFtQjtDQUNwQjtBQUNEO0FBQ0EsV0FBVztBQUNYLGVBQWU7Q0FDZDtBQUNEO0VBQ0UsOEJBQThCO0NBQy9CO0FBQ0Q7QUFDQSxnQkFBZ0I7Q0FDZjtBQUVEO0VBQ0UsMEJBQTBCO0VBQzFCLFlBQVk7Q0FDYjtBQUVEO0VBQ0UsMEJBQTBCO0VBQzFCLFlBQVk7Q0FDYiIsImZpbGUiOiJzcmMvYXBwL3Byb3RlY3RlZC9nYW1lcy9nYW1lL2dhbWUuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jb250ZW50IHRhYmxlIHRkLCAuY29udGVudCB0YWJsZSB0aCB7XG4gIGJvcmRlcjogMXB4IHNvbGlkICNkYmRiZGI7XG4gIHBhZGRpbmc6IDAuNWVtIDAuNzVlbTtcbiAgdmVydGljYWwtYWxpZ246IG1pZGRsZTtcbiAgaGVpZ2h0OiA1MHB4O1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG59XG4uY29udGVudCB0YWJsZSB7XG53aWR0aDogODAlO1xubWFyZ2luOiAwIGF1dG87XG59XG4uY29udGVudCB0YWJsZSB0cjpob3ZlciB7XG4gIGJhY2tncm91bmQtY29sb3I6IHRyYW5zcGFyZW50O1xufVxuLmJhdHRsZXNoaXAtdGlsZTpob3ZlciB7XG5jdXJzb3I6IHBvaW50ZXI7XG59XG5cbi53aW4ge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjMjNkMTYwO1xuICBjb2xvcjogI2ZmZjtcbn1cblxuLmZhaWwge1xuICBiYWNrZ3JvdW5kLWNvbG9yOiAjZmYzODYwO1xuICBjb2xvcjogI2ZmZjtcbn0iXX0= */"
+module.exports = ".game-boards {\n  display: flex;\n\tflex-direction: row;\n\tflex-wrap: wrap;\n\tjustify-content: center;\n\talign-items: center;\n}\n\ntable td,  table th {\n  border: 1px solid #dbdbdb;\n  padding: 0.5em 0.75em;\n  vertical-align: middle;\n  width: 40px;\n  height: 40px;\n  text-align: center;\n}\n\ntable {\n  margin: 0 auto;\n}\n\n.battleship-tile:hover {\n  cursor: pointer;\n  background-color: lightgray;\n}\n\n.battleship-tile:active {\n  background-color: transparent;\n}\n\n.win, .win:hover {\n  background-color: #23d160;\n  color: #fff;\n}\n\n.fail, .fail:hover {\n  background-color: #ff3860;\n  color: #fff;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvdGVjdGVkL2dhbWVzL2dhbWUvZ2FtZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsY0FBYztDQUNmLG9CQUFvQjtDQUNwQixnQkFBZ0I7Q0FDaEIsd0JBQXdCO0NBQ3hCLG9CQUFvQjtDQUNwQjs7QUFFRDtFQUNFLDBCQUEwQjtFQUMxQixzQkFBc0I7RUFDdEIsdUJBQXVCO0VBQ3ZCLFlBQVk7RUFDWixhQUFhO0VBQ2IsbUJBQW1CO0NBQ3BCOztBQUVEO0VBQ0UsZUFBZTtDQUNoQjs7QUFFRDtFQUNFLGdCQUFnQjtFQUNoQiw0QkFBNEI7Q0FDN0I7O0FBRUQ7RUFDRSw4QkFBOEI7Q0FDL0I7O0FBRUQ7RUFDRSwwQkFBMEI7RUFDMUIsWUFBWTtDQUNiOztBQUVEO0VBQ0UsMEJBQTBCO0VBQzFCLFlBQVk7Q0FDYiIsImZpbGUiOiJzcmMvYXBwL3Byb3RlY3RlZC9nYW1lcy9nYW1lL2dhbWUuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5nYW1lLWJvYXJkcyB7XG4gIGRpc3BsYXk6IGZsZXg7XG5cdGZsZXgtZGlyZWN0aW9uOiByb3c7XG5cdGZsZXgtd3JhcDogd3JhcDtcblx0anVzdGlmeS1jb250ZW50OiBjZW50ZXI7XG5cdGFsaWduLWl0ZW1zOiBjZW50ZXI7XG59XG5cbnRhYmxlIHRkLCAgdGFibGUgdGgge1xuICBib3JkZXI6IDFweCBzb2xpZCAjZGJkYmRiO1xuICBwYWRkaW5nOiAwLjVlbSAwLjc1ZW07XG4gIHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7XG4gIHdpZHRoOiA0MHB4O1xuICBoZWlnaHQ6IDQwcHg7XG4gIHRleHQtYWxpZ246IGNlbnRlcjtcbn1cblxudGFibGUge1xuICBtYXJnaW46IDAgYXV0bztcbn1cblxuLmJhdHRsZXNoaXAtdGlsZTpob3ZlciB7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgYmFja2dyb3VuZC1jb2xvcjogbGlnaHRncmF5O1xufVxuXG4uYmF0dGxlc2hpcC10aWxlOmFjdGl2ZSB7XG4gIGJhY2tncm91bmQtY29sb3I6IHRyYW5zcGFyZW50O1xufVxuXG4ud2luLCAud2luOmhvdmVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogIzIzZDE2MDtcbiAgY29sb3I6ICNmZmY7XG59XG5cbi5mYWlsLCAuZmFpbDpob3ZlciB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNmZjM4NjA7XG4gIGNvbG9yOiAjZmZmO1xufSJdfQ== */"
 
 /***/ }),
 
@@ -1120,7 +1120,7 @@ module.exports = ".content table td, .content table th {\n  border: 1px solid #d
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\" *ngIf=\"game\">\n      <h1 class=\"title\">Ready to sink some battleships?</h1>\n\n      <div class=\"has-text-centered\">\n        <span class=\"tag is-warning\" *ngIf=\"isPlayerTurn()\">Your turn.</span>\n        <span class=\"tag is-danger\" *ngIf=\"!isPlayerTurn()\">Computer turn.</span>\n      </div>\n      <section *ngIf=\"winner\" class=\"notification is-success has-text-centered\" style=\"color: green\">\n        <h1>\n          {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!\n        </h1>\n      </section>\n\n      <div class=\"columns\" >\n        <div class=\"column has-text-centered\" *ngFor=\"let board of boards\">\n          <h5>\n            <span class=\"tag is-info\" *ngIf=\"board.playerId !== '1'; else elseBlock\">\n              Your field <strong>SCORE: {{ board.score }}</strong>\n            </span>\n            <ng-template #elseBlock>\n              <span class=\"tag is-info\">\n                Enemy field <strong>SCORE: {{ board.score }}</strong>\n              </span>\n            </ng-template>\n          </h5>\n          <table class=\"is-bordered\" [style.opacity]=\"board.playerId === '1' ? 1 : 0.5\">\n            <tr *ngFor=\"let row of board.tiles; let j = index\">\n              <td\n                *ngFor=\"let col of row; let k = index\"\n                (click)=\"fire($event)\"\n                [style.background-color]=\"col.used ? '' : 'transparent'\"\n                [class.win]=\"col.status === 'win'\" [class.fail]=\"col.status !== 'win'\"\n                class=\"battleship-tile\"\n                id=\"{{j}}{{k}}{{board.playerId}}\"\n              >\n                {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n              </td>\n            </tr>\n          </table>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\" *ngIf=\"game\">\n  <div class=\"has-text-centered\" *ngIf=\"!winner\">\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"isPlayerTurn()\">\n      Your turn\n    </h2>\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"!isPlayerTurn()\">\n      Computer turn\n    </h2>\n  </div>\n  <section *ngIf=\"winner\" class=\"notification is-success\" style=\"color: green\">\n    <h1>\n      {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!\n    </h1>\n  </section>\n\n  <div class=\"game-boards\">\n    <div class=\"board mr-3\" *ngFor=\"let board of boards\">\n      <h5>\n        <span *ngIf=\"board.playerId !== '1'; else elseBlock\">\n          Your field <strong>SCORE: {{ board.score }}</strong>\n        </span>\n        <ng-template #elseBlock>\n          <span>\n            Enemy field <strong>SCORE: {{ board.score }}</strong>\n          </span>\n        </ng-template>\n      </h5>\n      <table [style.opacity]=\"board.playerId === '1' ? 1 : 0.5\">\n        <tr *ngFor=\"let row of board.tiles; let j = index\">\n          <td *ngFor=\"let col of row; let k = index\" (click)=\"fire($event)\" [class.win]=\"col.status === 'win'\"\n            [class.fail]=\"col.status === 'fail'\" class=\"battleship-tile\" id=\"{{j}}{{k}}{{board.playerId}}\">\n            {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n          </td>\n        </tr>\n      </table>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -1247,7 +1247,7 @@ var GameComponent = /** @class */ (function () {
                 });
             }
             else {
-                this.enemyTurn();
+                setTimeout(this.enemyTurn.bind(this), 200);
             }
             this.gameService.updateGame();
         }
@@ -1365,7 +1365,7 @@ var GameComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".games-list {\n  overflow-y: auto;\n  height: calc(100vh - 80px - 120px);\n}\n\n@media all and (min-width: 128px) and (max-width: 468px) {\n  .games-list {\n    height: calc(100vh - 80px - 30px);\n  }\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvdGVjdGVkL2dhbWVzL2dhbWVzLWxpc3QvZ2FtZXMtbGlzdC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsaUJBQWlCO0VBQ2pCLG1DQUFtQztDQUNwQzs7QUFFRDtFQUNFO0lBQ0Usa0NBQWtDO0dBQ25DO0NBQ0YiLCJmaWxlIjoic3JjL2FwcC9wcm90ZWN0ZWQvZ2FtZXMvZ2FtZXMtbGlzdC9nYW1lcy1saXN0LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZ2FtZXMtbGlzdCB7XG4gIG92ZXJmbG93LXk6IGF1dG87XG4gIGhlaWdodDogY2FsYygxMDB2aCAtIDgwcHggLSAxMjBweCk7XG59XG5cbkBtZWRpYSBhbGwgYW5kIChtaW4td2lkdGg6IDEyOHB4KSBhbmQgKG1heC13aWR0aDogNDY4cHgpIHtcbiAgLmdhbWVzLWxpc3Qge1xuICAgIGhlaWdodDogY2FsYygxMDB2aCAtIDgwcHggLSAzMHB4KTtcbiAgfVxufVxuIl19 */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Byb3RlY3RlZC9nYW1lcy9nYW1lcy1saXN0L2dhbWVzLWxpc3QuY29tcG9uZW50LmNzcyJ9 */"
 
 /***/ }),
 
@@ -1376,7 +1376,7 @@ module.exports = ".games-list {\n  overflow-y: auto;\n  height: calc(100vh - 80p
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"games-list\">\n  <div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n    <div class=\"card\">\n      <div class=\"card-body\">\n        <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\"\n            [class.text-danger]=\"game.status === 'lost'\"\n            [class.text-success]=\"game.status === 'win'\">\n          {{getStatus(game)}}\n        </h4>\n\n        <p class=\"card-text\">\n          {{game.date | amTimeAgo}}\n        </p>\n\n        <a [routerLink]=\"[game.key]\" class=\"card-link\" *ngIf=\"game.status === 'notEnded'\">\n          Continue game\n        </a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n    <div class=\"card\">\n      <div class=\"card-body\">\n        <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\" [class.text-danger]=\"game.status === 'lost'\"\n          [class.text-success]=\"game.status === 'win'\">\n          {{getStatus(game)}}\n        </h4>\n\n        <p class=\"card-text\">\n          {{game.date | amTimeAgo}}\n        </p>\n\n        <a [routerLink]=\"[game.key]\" class=\"card-link\" *ngIf=\"game.status === 'notEnded'\">\n          Continue game\n        </a>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -1460,7 +1460,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\">\n      <button class=\"btn btn-outline-success mb-4\" (click)=\"onNewGame()\">\n        New Game\n      </button>\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<button class=\"btn btn-outline-success mb-2 ml-5\" (click)=\"onNewGame()\">\n  New Game\n</button>\n<div class=\"scroll\">\n  <router-outlet></router-outlet>\n</div>"
 
 /***/ }),
 
