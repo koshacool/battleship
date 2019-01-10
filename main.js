@@ -570,7 +570,7 @@ var AuthService = /** @class */ (function () {
         this.spinnerService.hide();
         this.store.dispatch(new _store_auth_auth_actions__WEBPACK_IMPORTED_MODULE_10__["Signup"]({ displayName: displayName, email: email, photoUrl: photoUrl, uid: uid }));
         this.getToken();
-        this.router.navigate(['game']);
+        this.router.navigate(['/']);
     };
     AuthService.prototype.getToken = function () {
         var _this = this;
@@ -609,7 +609,7 @@ var AuthService = /** @class */ (function () {
         firebase_app__WEBPACK_IMPORTED_MODULE_4__["auth"]().signOut();
         this.isLoggedIn = false;
         this.store.dispatch(new _store_auth_auth_actions__WEBPACK_IMPORTED_MODULE_10__["Logout"]());
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
     };
     AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
@@ -630,16 +630,24 @@ var AuthService = /** @class */ (function () {
 /*!*******************************************!*\
   !*** ./src/app/constants/gameStatuses.ts ***!
   \*******************************************/
-/*! exports provided: default */
+/*! exports provided: GAME_STATUSES, GAME_STATUSES_TEXT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ({
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_STATUSES", function() { return GAME_STATUSES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAME_STATUSES_TEXT", function() { return GAME_STATUSES_TEXT; });
+var _a;
+var GAME_STATUSES = {
     lost: 'lost',
     win: 'win',
     notEnded: 'notEnded',
-});
+};
+var GAME_STATUSES_TEXT = (_a = {},
+    _a[GAME_STATUSES.win] = 'You won this game',
+    _a[GAME_STATUSES.lost] = 'You lost this game',
+    _a[GAME_STATUSES.notEnded] = 'Game not ended',
+    _a);
 
 
 /***/ }),
@@ -648,7 +656,7 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************!*\
   !*** ./src/app/constants/index.ts ***!
   \************************************/
-/*! exports provided: ROUTES, GAME_STATUSES, BOARD_SIZE */
+/*! exports provided: ROUTES, GAME_STATUSES, GAME_STATUSES_TEXT, BOARD_SIZE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -658,7 +666,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ROUTES", function() { return _routes__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
 /* harmony import */ var _gameStatuses__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gameStatuses */ "./src/app/constants/gameStatuses.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GAME_STATUSES", function() { return _gameStatuses__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GAME_STATUSES", function() { return _gameStatuses__WEBPACK_IMPORTED_MODULE_1__["GAME_STATUSES"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GAME_STATUSES_TEXT", function() { return _gameStatuses__WEBPACK_IMPORTED_MODULE_1__["GAME_STATUSES_TEXT"]; });
 
 
 
@@ -728,7 +738,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ng4_loading_spinner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng4-loading-spinner */ "./node_modules/ng4-loading-spinner/ng4-loading-spinner.umd.js");
 /* harmony import */ var ng4_loading_spinner__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ng4_loading_spinner__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../auth.service */ "./src/app/auth.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../auth.service */ "./src/app/auth.service.ts");
+
+
 
 
 
@@ -742,16 +756,23 @@ var HeaderComponent = /** @class */ (function () {
         this.zone = zone;
         this.router = router;
         this.store = store;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_5__["Subject"]();
     }
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.store.select('auth')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var user = _a.user, isAuthinticated = _a.isAuthinticated;
             _this.user = user;
             _this.isAuthinticated = isAuthinticated;
-            _this.zone.run(function () { });
+            _this.zone.run(function () {
+            });
         });
+    };
+    HeaderComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     HeaderComponent.prototype.onLogout = function () {
         this.authService.logout();
@@ -762,7 +783,7 @@ var HeaderComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./header.component.html */ "./src/app/header/header.component.html"),
             styles: [__webpack_require__(/*! ./header.component.css */ "./src/app/header/header.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"],
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"],
             ng4_loading_spinner__WEBPACK_IMPORTED_MODULE_3__["Ng4LoadingSpinnerService"],
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
@@ -860,11 +881,10 @@ var AuthGuard = /** @class */ (function () {
             return true;
         }
         return this.authService.user.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (user) { return !!user; }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(function (loggedIn) {
-            console.log(loggedIn);
             if (loggedIn) {
                 return true;
             }
-            _this.router.navigate(['login']);
+            _this.router.navigate(['/login']);
             return false;
         }));
     };
@@ -1060,9 +1080,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var angular_notifier__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! angular-notifier */ "./node_modules/angular-notifier/esm5/angular-notifier.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _shared_game__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../shared/game */ "./src/app/shared/game.ts");
-/* harmony import */ var _game_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../game.service */ "./src/app/protected/game.service.ts");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../constants */ "./src/app/constants/index.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _shared_game__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/game */ "./src/app/shared/game.ts");
+/* harmony import */ var _game_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../game.service */ "./src/app/protected/game.service.ts");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../constants */ "./src/app/constants/index.ts");
+
+
 
 
 
@@ -1085,7 +1109,9 @@ var GameComponent = /** @class */ (function () {
         this.notifierService = notifierService;
         this.route = route;
         this.gameService = gameService;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_5__["Subject"]();
         this.store.select('auth')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var user = _a.user, isAuthinticated = _a.isAuthinticated;
             if (isAuthinticated && !_this.userId) {
@@ -1095,7 +1121,9 @@ var GameComponent = /** @class */ (function () {
     }
     GameComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.route.params.subscribe(function (_a) {
+        this.route.params
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe))
+            .subscribe(function (_a) {
             var id = _a.id;
             _this.store.select('games').subscribe(function (_a) {
                 var games = _a.games;
@@ -1103,9 +1131,13 @@ var GameComponent = /** @class */ (function () {
                     var key = _a.key;
                     return key === id;
                 });
-                _this.gameService.restoreGame(new _shared_game__WEBPACK_IMPORTED_MODULE_5__["Game"](gameFromServer));
+                _this.gameService.restoreGame(new _shared_game__WEBPACK_IMPORTED_MODULE_7__["Game"](gameFromServer));
             });
         });
+    };
+    GameComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     GameComponent.prototype.fire = function (e) {
         var id = e.target.id;
@@ -1149,7 +1181,7 @@ var GameComponent = /** @class */ (function () {
             this.game.turn = '1';
             var winner = this.winner;
             if (winner) {
-                this.game.status = winner.playerId === this.userId ? _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].win : _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].lost;
+                this.game.status = winner.playerId === this.userId ? _constants__WEBPACK_IMPORTED_MODULE_9__["GAME_STATUSES"].win : _constants__WEBPACK_IMPORTED_MODULE_9__["GAME_STATUSES"].lost;
                 this.notifierService.show({
                     message: 'You win',
                     type: 'success',
@@ -1170,8 +1202,8 @@ var GameComponent = /** @class */ (function () {
             var playerId = _a.playerId;
             return playerId === '1';
         });
-        var row = this.getRandomInt(_constants__WEBPACK_IMPORTED_MODULE_7__["BOARD_SIZE"]);
-        var col = this.getRandomInt(_constants__WEBPACK_IMPORTED_MODULE_7__["BOARD_SIZE"]);
+        var row = this.getRandomInt(_constants__WEBPACK_IMPORTED_MODULE_9__["BOARD_SIZE"]);
+        var col = this.getRandomInt(_constants__WEBPACK_IMPORTED_MODULE_9__["BOARD_SIZE"]);
         if (board.tiles[row][col].status) {
             return this.enemyTurn();
         }
@@ -1187,7 +1219,7 @@ var GameComponent = /** @class */ (function () {
         this.game.turn = this.userId;
         var winner = this.winner;
         if (winner) {
-            this.game.status = winner.playerId === this.userId ? _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].win : _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].lost;
+            this.game.status = winner.playerId === this.userId ? _constants__WEBPACK_IMPORTED_MODULE_9__["GAME_STATUSES"].win : _constants__WEBPACK_IMPORTED_MODULE_9__["GAME_STATUSES"].lost;
             this.notifierService.show({
                 message: 'Computer win',
                 type: 'error',
@@ -1201,7 +1233,7 @@ var GameComponent = /** @class */ (function () {
     GameComponent.prototype.checkValidHit = function (board, tile) {
         var validationConfig = [
             {
-                condition: this.game.status !== _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].notEnded || this.winner,
+                condition: this.game.status !== _constants__WEBPACK_IMPORTED_MODULE_9__["GAME_STATUSES"].notEnded || this.winner,
                 error: 'Game is over',
             },
             {
@@ -1227,7 +1259,7 @@ var GameComponent = /** @class */ (function () {
             if (this.game && this.game.boards) {
                 return this.game.boards.find(function (_a) {
                     var score = _a.score;
-                    return score === _constants__WEBPACK_IMPORTED_MODULE_7__["BOARD_SIZE"];
+                    return score === _constants__WEBPACK_IMPORTED_MODULE_9__["BOARD_SIZE"];
                 });
             }
             return null;
@@ -1258,7 +1290,7 @@ var GameComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"],
             angular_notifier__WEBPACK_IMPORTED_MODULE_3__["NotifierService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
-            _game_service__WEBPACK_IMPORTED_MODULE_6__["GameService"]])
+            _game_service__WEBPACK_IMPORTED_MODULE_8__["GameService"]])
     ], GameComponent);
     return GameComponent;
 }());
@@ -1302,34 +1334,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../constants */ "./src/app/constants/index.ts");
 
-var _a;
 
 
-var gameStatuses = {
-    lost: 'lost',
-    win: 'win',
-    notEnded: 'notEnded',
-};
-var textConfig = (_a = {},
-    _a[gameStatuses.win] = 'You won this game',
-    _a[gameStatuses.lost] = 'You lost this game',
-    _a[gameStatuses.notEnded] = 'Game not ended',
-    _a);
+
+
+
 var GamesListComponent = /** @class */ (function () {
     function GamesListComponent(store) {
         this.store = store;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_4__["Subject"]();
     }
     GamesListComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.store.select('games')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var games = _a.games;
             _this.games = games;
         });
     };
+    GamesListComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    };
     GamesListComponent.prototype.getStatus = function (game) {
-        return textConfig[game.status];
+        return _constants__WEBPACK_IMPORTED_MODULE_5__["GAME_STATUSES_TEXT"][game.status];
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
@@ -1368,7 +1401,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\">\n      <button class=\"btn btn-primary mb-4\" (click)=\"onNewGame()\">New Game</button>\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"section\">\n  <div class=\"container\">\n    <div class=\"content\">\n      <button class=\"btn btn-outline-success mb-4\" (click)=\"onNewGame()\">\n        New Game\n      </button>\n      <router-outlet></router-outlet>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1388,9 +1421,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_fire_database__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/fire/database */ "./node_modules/@angular/fire/database/index.js");
 /* harmony import */ var angular_notifier__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! angular-notifier */ "./node_modules/angular-notifier/esm5/angular-notifier.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../store/games/games.actions */ "./src/app/store/games/games.actions.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _game_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../game.service */ "./src/app/protected/game.service.ts");
+/* harmony import */ var _store_games_games_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../store/games/games.actions */ "./src/app/store/games/games.actions.ts");
+/* harmony import */ var _game_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../game.service */ "./src/app/protected/game.service.ts");
+
 
 
 
@@ -1408,9 +1443,11 @@ var GamesComponent = /** @class */ (function () {
         this.db = db;
         this.router = router;
         this.gameService = gameService;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_6__["Subject"]();
         var gamesDbRef = db.list('games');
         this.gamesDbRef = gamesDbRef;
         this.store.select('auth')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var user = _a.user, isAuthinticated = _a.isAuthinticated;
             if (isAuthinticated) {
@@ -1420,17 +1457,22 @@ var GamesComponent = /** @class */ (function () {
                     .map(function (c) { return (tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({ key: c.payload.key }, c.payload.val())); })
                     // @ts-ignore
                     .filter(function (c) { return c.userId === user.uid; }); }))
-                    .subscribe(function (games) { return _this.store.dispatch(new _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__["Update"](games)); });
+                    .subscribe(function (games) { return _this.store.dispatch(new _store_games_games_actions__WEBPACK_IMPORTED_MODULE_8__["Update"](games)); });
             }
         });
     }
     GamesComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.store.select('games')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var games = _a.games;
             return _this.games = games;
         });
+    };
+    GamesComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     GamesComponent.prototype.onNewGame = function () {
         this.gameService.createGame(this.playerId);
@@ -1439,14 +1481,14 @@ var GamesComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-games',
             template: __webpack_require__(/*! ./games.component.html */ "./src/app/protected/games/games.component.html"),
-            providers: [_game_service__WEBPACK_IMPORTED_MODULE_8__["GameService"]],
+            providers: [_game_service__WEBPACK_IMPORTED_MODULE_9__["GameService"]],
             styles: [__webpack_require__(/*! ./games.component.css */ "./src/app/protected/games/games.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_5__["Store"],
             angular_notifier__WEBPACK_IMPORTED_MODULE_4__["NotifierService"],
             _angular_fire_database__WEBPACK_IMPORTED_MODULE_3__["AngularFireDatabase"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-            _game_service__WEBPACK_IMPORTED_MODULE_8__["GameService"]])
+            _game_service__WEBPACK_IMPORTED_MODULE_9__["GameService"]])
     ], GamesComponent);
     return GamesComponent;
 }());
@@ -1546,7 +1588,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"chart\">\n  <canvas id=\"canvas\">{{ chart }}</canvas>\n</div>\n"
+module.exports = "<div class=\"container\" *ngIf=\"chart\">\n    <canvas id=\"canvas\">{{ chart }}</canvas>\n</div>\n"
 
 /***/ }),
 
@@ -1566,9 +1608,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(chart_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
 /* harmony import */ var _angular_fire_database__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/fire/database */ "./node_modules/@angular/fire/database/index.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../store/games/games.actions */ "./src/app/store/games/games.actions.ts");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../constants */ "./src/app/constants/index.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _store_games_games_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../store/games/games.actions */ "./src/app/store/games/games.actions.ts");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../constants */ "./src/app/constants/index.ts");
+
 
 
 
@@ -1585,14 +1629,14 @@ var getChartConfig = function (data) { return ({
                 label: '% of Games',
                 data: data,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(34, 189, 37, 0.2)',
+                    'rgba(239, 35, 35, 0.2)',
+                    'rgba(60, 214, 245, 0.2)',
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
+                    'rgba(34, 189, 37, 1)',
+                    'rgba(239, 35, 35, 1)',
+                    'rgba(60, 214, 245, 1)',
                 ],
                 borderWidth: 1
             }]
@@ -1608,30 +1652,36 @@ var StatisticsComponent = /** @class */ (function () {
         var _this = this;
         this.store = store;
         this.db = db;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_5__["Subject"]();
         var gamesDbRef = db.list('games');
         this.store.select('auth')
             .subscribe(function (_a) {
             var user = _a.user, isAuthinticated = _a.isAuthinticated;
             if (isAuthinticated) {
                 gamesDbRef.snapshotChanges()
-                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["map"])(function (changes) { return changes
+                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(_this.unsubscribe), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (changes) { return changes
                     .map(function (c) { return (tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({ key: c.payload.key }, c.payload.val())); })
                     // @ts-ignore
                     .filter(function (c) { return c.userId === user.uid; }); }))
-                    .subscribe(function (games) { return _this.store.dispatch(new _store_games_games_actions__WEBPACK_IMPORTED_MODULE_6__["Update"](games)); });
+                    .subscribe(function (games) { return _this.store.dispatch(new _store_games_games_actions__WEBPACK_IMPORTED_MODULE_7__["Update"](games)); });
             }
         });
     }
     StatisticsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.store.select('games')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe))
             .subscribe(function (_a) {
             var games = _a.games;
-            var wonGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].win; }).length;
-            var lostGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].lost; }).length;
-            var notEndedGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_7__["GAME_STATUSES"].notEnded; }).length;
+            var wonGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_8__["GAME_STATUSES"].win; }).length;
+            var lostGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_8__["GAME_STATUSES"].lost; }).length;
+            var notEndedGames = games.filter(function (game) { return game.status === _constants__WEBPACK_IMPORTED_MODULE_8__["GAME_STATUSES"].notEnded; }).length;
             _this.chart = new chart_js__WEBPACK_IMPORTED_MODULE_2__["Chart"]('canvas', getChartConfig([wonGames, lostGames, notEndedGames]));
         });
+    };
+    StatisticsComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     StatisticsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1833,8 +1883,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var src_app_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/app/auth.service */ "./src/app/auth.service.ts");
-/* harmony import */ var _formControlStatuses__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../formControlStatuses */ "./src/app/public/auth/formControlStatuses.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var src_app_auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/app/auth.service */ "./src/app/auth.service.ts");
+/* harmony import */ var _formControlStatuses__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../formControlStatuses */ "./src/app/public/auth/formControlStatuses.ts");
+
+
 
 
 
@@ -1848,17 +1902,24 @@ var LoginComponent = /** @class */ (function () {
         this.router = router;
         this.fb = fb;
         this.store = store;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_6__["Subject"]();
         this.isSubmitted = false;
         this.createForm();
     }
     LoginComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.store.select('auth').subscribe(function (_a) {
+        this.store.select('auth')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_5__["takeUntil"])(this.unsubscribe))
+            .subscribe(function (_a) {
             var isAuthinticated = _a.isAuthinticated;
             if (isAuthinticated) {
                 _this.router.navigate(['/']);
             }
         });
+    };
+    LoginComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     LoginComponent.prototype.createForm = function () {
         this.loginForm = this.fb.group({
@@ -1872,7 +1933,7 @@ var LoginComponent = /** @class */ (function () {
     LoginComponent.prototype.onFormLogin = function () {
         var _a = this.loginForm, status = _a.status, value = _a.value;
         this.isSubmitted = true;
-        if (status === _formControlStatuses__WEBPACK_IMPORTED_MODULE_6__["formControlStatuses"].valid) {
+        if (status === _formControlStatuses__WEBPACK_IMPORTED_MODULE_8__["formControlStatuses"].valid) {
             this.authService.signIn(value);
         }
     };
@@ -1882,7 +1943,7 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./login.component.html */ "./src/app/public/auth/login/login.component.html"),
             styles: [__webpack_require__(/*! ./login.component.css */ "./src/app/public/auth/login/login.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"],
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
@@ -1931,9 +1992,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 /* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
-/* harmony import */ var _formControlStatuses__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../formControlStatuses */ "./src/app/public/auth/formControlStatuses.ts");
-/* harmony import */ var src_app_auth_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/auth.service */ "./src/app/auth.service.ts");
-/* harmony import */ var _validation_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../validation.service */ "./src/app/public/auth/validation.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _formControlStatuses__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../formControlStatuses */ "./src/app/public/auth/formControlStatuses.ts");
+/* harmony import */ var src_app_auth_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/app/auth.service */ "./src/app/auth.service.ts");
+/* harmony import */ var _validation_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../validation.service */ "./src/app/public/auth/validation.service.ts");
+
+
 
 
 
@@ -1948,29 +2013,36 @@ var RegisterComponent = /** @class */ (function () {
         this.router = router;
         this.fb = fb;
         this.store = store;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_5__["Subject"]();
         this.isSubmitted = false;
         this.createForm();
     }
     RegisterComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.store.select('auth').subscribe(function (_a) {
+        this.store.select('auth')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.unsubscribe))
+            .subscribe(function (_a) {
             var isAuthinticated = _a.isAuthinticated;
             if (isAuthinticated) {
                 _this.router.navigate(['/']);
             }
         });
     };
+    RegisterComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    };
     RegisterComponent.prototype.createForm = function () {
         this.registerForm = this.fb.group({
-            email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _validation_service__WEBPACK_IMPORTED_MODULE_7__["ValidationService"].emailValidator]],
+            email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _validation_service__WEBPACK_IMPORTED_MODULE_9__["ValidationService"].emailValidator]],
             password: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8)]],
             repeatPassword: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8)],],
-        }, { validator: _validation_service__WEBPACK_IMPORTED_MODULE_7__["ValidationService"].repeatPasswordValidator });
+        }, { validator: _validation_service__WEBPACK_IMPORTED_MODULE_9__["ValidationService"].repeatPasswordValidator });
     };
     RegisterComponent.prototype.onRegister = function () {
         var _a = this.registerForm, status = _a.status, value = _a.value;
         this.isSubmitted = true;
-        if (status === _formControlStatuses__WEBPACK_IMPORTED_MODULE_5__["formControlStatuses"].valid) {
+        if (status === _formControlStatuses__WEBPACK_IMPORTED_MODULE_7__["formControlStatuses"].valid) {
             this.authService.signUp(value);
         }
     };
@@ -1980,7 +2052,7 @@ var RegisterComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./register.component.html */ "./src/app/public/auth/register/register.component.html"),
             styles: [__webpack_require__(/*! ./register.component.css */ "./src/app/public/auth/register/register.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_auth_service__WEBPACK_IMPORTED_MODULE_6__["AuthService"],
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_auth_service__WEBPACK_IMPORTED_MODULE_8__["AuthService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormBuilder"],
             _ngrx_store__WEBPACK_IMPORTED_MODULE_4__["Store"]])
@@ -2058,7 +2130,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  home works!\n</p>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"text-center\">\n    <h2>It's a simple battleship game!</h2>\n    <div *ngIf=\"(auth$ | async).isAuthinticated; else elseBlock\">\n      <a type=\"button\" routerLink=\"/games\" class=\"btn btn-outline-success\">\n        PLAY\n      </a>\n    </div>\n    <ng-template #elseBlock>\n      <h3>To play need to authorize</h3>\n      <a type=\"button\" routerLink=\"/login\" class=\"btn btn-outline-success\">\n        LOGIN\n      </a>\n    </ng-template>\n  </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -2074,12 +2146,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomeComponent", function() { return HomeComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ "./node_modules/@ngrx/store/fesm5/store.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+
+
+
 
 
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent() {
+    function HomeComponent(store) {
+        this.store = store;
+        this.unsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
     }
     HomeComponent.prototype.ngOnInit = function () {
+        this.auth$ = this.store.select('auth').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["takeUntil"])(this.unsubscribe));
+    };
+    HomeComponent.prototype.ngOnDestroy = function () {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     };
     HomeComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -2087,7 +2172,7 @@ var HomeComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./home.component.html */ "./src/app/public/home/home.component.html"),
             styles: [__webpack_require__(/*! ./home.component.css */ "./src/app/public/home/home.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ngrx_store__WEBPACK_IMPORTED_MODULE_2__["Store"]])
     ], HomeComponent);
     return HomeComponent;
 }());
