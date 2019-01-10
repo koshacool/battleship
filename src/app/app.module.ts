@@ -23,6 +23,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { NotFoundComponent } from './public/not-found/not-found.component';
 import { reducers } from './store/app.reducers';
+import { FooterComponent } from './footer/footer.component';
 
 function logger(reducer): any {
   // default, no options
@@ -35,6 +36,7 @@ const metaReducers = environment.production ? [] : [logger];
     AppComponent,
     HeaderComponent,
     NotFoundComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
