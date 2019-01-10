@@ -1,8 +1,5 @@
-<div class="section">
-  <div class="container">
-    <div class="content" *ngIf="game">
-      <h1 class="title">Ready to sink some battleships?</h1>
 
+    <div class="container" *ngIf="game">
       <div class="has-text-centered">
         <span class="tag is-warning" *ngIf="isPlayerTurn()">Your turn.</span>
         <span class="tag is-danger" *ngIf="!isPlayerTurn()">Computer turn.</span>
@@ -42,5 +39,4 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+  
