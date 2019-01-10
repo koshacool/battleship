@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { formControlStatuses } from '../formControlStatuses';
 import { AuthService } from 'src/app/auth.service';
@@ -13,7 +15,8 @@ import * as fromApp from '../../../store/app.reducers';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
   registerForm: FormGroup;
   isSubmitted: Boolean = false;
 
@@ -27,13 +30,20 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.select('auth').subscribe(
+    this.store.select('auth')
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(
       ({ isAuthinticated }) => {
         if (isAuthinticated) {
           this.router.navigate(['/']);
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   createForm() {

@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { NotifierService } from 'angular-notifier';
 import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 import * as fromApp from '../../store/app.reducers';
 import * as gamesActions from '../../store/games/games.actions';
 
 import { Game } from '../../shared/game';
-import { map } from 'rxjs/operators';
 import {GameService} from '../game.service';
 
 @Component({
@@ -17,7 +18,8 @@ import {GameService} from '../game.service';
   styleUrls: ['./games.component.css'],
   providers: [GameService]
 })
-export class GamesComponent implements OnInit {
+export class GamesComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
   games: Game[];
   gamesDbRef: any;
   playerId: string;
@@ -33,6 +35,7 @@ export class GamesComponent implements OnInit {
     this.gamesDbRef = gamesDbRef;
 
     this.store.select('auth')
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(({ user, isAuthinticated }) => {
         if (isAuthinticated) {
           this.playerId = user.uid;
@@ -51,7 +54,13 @@ export class GamesComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('games')
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(({ games }) => this.games = games);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   onNewGame() {

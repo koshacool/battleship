@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Store } from '@ngrx/store';
 import { AngularFireDatabase } from '@angular/fire/database';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 import * as fromApp from '../../store/app.reducers';
 import * as gamesActions from '../../store/games/games.actions';
@@ -41,8 +42,9 @@ const getChartConfig = (data: number[]) => ({
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css']
 })
-export class StatisticsComponent implements OnInit {
-  chart: number[];
+export class StatisticsComponent implements OnInit, OnDestroy {
+  private unsubscribe: Subject<void> = new Subject();
+  chart: Chart;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -55,6 +57,7 @@ export class StatisticsComponent implements OnInit {
         if (isAuthinticated) {
           gamesDbRef.snapshotChanges()
             .pipe(
+              takeUntil(this.unsubscribe),
               map(changes => changes
                 .map(c => ({key: c.payload.key, ...c.payload.val()}))
                 // @ts-ignore
@@ -67,6 +70,7 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
     this.store.select('games')
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(({games}) => {
         const wonGames = games.filter(game => game.status === GAME_STATUSES.win).length;
         const lostGames = games.filter(game => game.status === GAME_STATUSES.lost).length;
@@ -74,5 +78,10 @@ export class StatisticsComponent implements OnInit {
 
         this.chart = new Chart('canvas', getChartConfig([wonGames, lostGames, notEndedGames]));
       });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
