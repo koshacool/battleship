@@ -879,11 +879,11 @@ var customNotifierOptions = {
     },
     theme: 'material',
     behaviour: {
-        autoHide: 3000,
+        autoHide: 2500,
         onClick: 'hide',
         onMouseover: 'pauseAutoHide',
         showDismissButton: true,
-        stacking: 5
+        stacking: 6
     },
     animations: {
         enabled: true,
@@ -894,7 +894,7 @@ var customNotifierOptions = {
         },
         hide: {
             preset: 'fade',
-            speed: 100,
+            speed: 50,
             easing: 'ease',
             offset: 50
         },
@@ -1120,7 +1120,7 @@ module.exports = ".game-boards {\n  display: flex;\n\tflex-direction: row;\n\tfl
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"game\">\n  <div class=\"has-text-centered\" *ngIf=\"!winner\">\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"isPlayerTurn()\">\n      Your turn\n    </h2>\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"!isPlayerTurn()\">\n      Computer turn\n    </h2>\n  </div>\n  <section *ngIf=\"winner\" class=\"notification is-success\" style=\"color: green\">\n    <h1>\n      {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!\n    </h1>\n  </section>\n\n  <div class=\"game-boards\">\n    <div class=\"board mr-3\" *ngFor=\"let board of boards\">\n      <h5>\n        <span *ngIf=\"board.playerId !== '1'; else elseBlock\">\n          Your field <strong>SCORE: {{ board.score }}</strong>\n        </span>\n        <ng-template #elseBlock>\n          <span>\n            Enemy field <strong>SCORE: {{ board.score }}</strong>\n          </span>\n        </ng-template>\n      </h5>\n      <table [style.opacity]=\"board.playerId === '1' ? 1 : 0.5\">\n        <tr *ngFor=\"let row of board.tiles; let j = index\">\n          <td *ngFor=\"let col of row; let k = index\" (click)=\"fire($event)\" [class.win]=\"col.status === 'win'\"\n            [class.fail]=\"col.status === 'fail'\" class=\"battleship-tile\" id=\"{{j}}{{k}}{{board.playerId}}\">\n            {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n          </td>\n        </tr>\n      </table>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\" *ngIf=\"game\">\n  <div class=\"has-text-centered\" *ngIf=\"!winner\">\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"isPlayerTurn()\">\n      Your turn\n    </h2>\n    <h2 class=\"notification is-success\" style=\"color: green\" *ngIf=\"!isPlayerTurn()\">\n      Computer turn\n    </h2>\n  </div>\n  <section *ngIf=\"winner\" class=\"notification is-success\" style=\"color: green\">\n    <h1>\n      {{ winner.playerId === '1' ? 'Computer' : 'You' }} has won the game!\n    </h1>\n  </section>\n\n  <div class=\"game-boards\">\n    <div class=\"board mr-3 mb-3\" *ngFor=\"let board of boards\">\n      <h5>\n        <span *ngIf=\"board.playerId !== '1'; else elseBlock\">\n          Your field <strong>SCORE: {{ board.score }}</strong>\n        </span>\n        <ng-template #elseBlock>\n          <span>\n            Enemy field <strong>SCORE: {{ board.score }}</strong>\n          </span>\n        </ng-template>\n      </h5>\n      <table [style.opacity]=\"board.playerId === '1' ? 1 : 0.5\">\n        <tr *ngFor=\"let row of board.tiles; let j = index\">\n          <td *ngFor=\"let col of row; let k = index\" (click)=\"fire($event)\" [class.win]=\"col.status === 'win'\"\n            [class.fail]=\"col.status === 'fail'\" class=\"battleship-tile\" id=\"{{j}}{{k}}{{board.playerId}}\">\n            {{ col.value == \"X\" ? \"X\" : \"💀\" }}\n          </td>\n        </tr>\n      </table>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1247,7 +1247,7 @@ var GameComponent = /** @class */ (function () {
                 });
             }
             else {
-                setTimeout(this.enemyTurn.bind(this), 200);
+                setTimeout(this.enemyTurn.bind(this), 100);
             }
             this.gameService.updateGame();
         }
@@ -1376,7 +1376,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n    <div class=\"card\">\n      <div class=\"card-body\">\n        <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\" [class.text-danger]=\"game.status === 'lost'\"\n          [class.text-success]=\"game.status === 'win'\">\n          {{getStatus(game)}}\n        </h4>\n\n        <p class=\"card-text\">\n          {{game.date | amTimeAgo}}\n        </p>\n\n        <a [routerLink]=\"[game.key]\" class=\"card-link\" *ngIf=\"game.status === 'notEnded'\">\n          Continue game\n        </a>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <div *ngIf=\"games.length > 0; else elseBlock\">\n    <div class=\"column has-text-centered\" *ngFor=\"let game of games\">\n      <div class=\"card\">\n        <div class=\"card-body\">\n          <h4 class=\"card-title\" [class.text-info]=\"game.status === 'notEnded'\"\n              [class.text-danger]=\"game.status === 'lost'\"\n              [class.text-success]=\"game.status === 'win'\">\n            {{getStatus(game)}}\n          </h4>\n\n          <p class=\"card-text\">\n            {{game.date | amTimeAgo}}\n          </p>\n\n          <a [routerLink]=\"[game.key]\" class=\"card-link\">\n            {{game.status === 'notEnded' ? 'Continue game' : 'View game'}}\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n  <ng-template #elseBlock>\n    <h2>Games not found</h2>\n  </ng-template>\n</div>\n"
 
 /***/ }),
 
@@ -2178,7 +2178,7 @@ var ValidationService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3B1YmxpYy9ob21lL2hvbWUuY29tcG9uZW50LmNzcyJ9 */"
+module.exports = "a:hover {\n  background-color: #28a745;\n}\na {\n   background-color: transparent;\n }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHVibGljL2hvbWUvaG9tZS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsMEJBQTBCO0NBQzNCO0FBQ0Q7R0FDRyw4QkFBOEI7RUFDL0IiLCJmaWxlIjoic3JjL2FwcC9wdWJsaWMvaG9tZS9ob21lLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJhOmhvdmVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogIzI4YTc0NTtcbn1cbmEge1xuICAgYmFja2dyb3VuZC1jb2xvcjogdHJhbnNwYXJlbnQ7XG4gfVxuIl19 */"
 
 /***/ }),
 
