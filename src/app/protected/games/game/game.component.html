@@ -14,7 +14,7 @@
   </section>
 
   <div class="game-boards">
-    <div class="board mr-3" *ngFor="let board of boards">
+    <div class="board mr-3 mb-3" *ngFor="let board of boards">
       <h5>
         <span *ngIf="board.playerId !== '1'; else elseBlock">
           Your field <strong>SCORE: {{ board.score }}</strong>

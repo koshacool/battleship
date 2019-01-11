@@ -1,9 +1,6 @@
 import { NotifierOptions } from 'angular-notifier';
 
-export /**
- * Custom angular notifier options
- */
-const customNotifierOptions: NotifierOptions = {
+export const customNotifierOptions: NotifierOptions = {
   position: {
     horizontal: {
       position: 'right',
@@ -17,11 +14,11 @@ const customNotifierOptions: NotifierOptions = {
   },
   theme: 'material',
   behaviour: {
-    autoHide: 3000,
+    autoHide: 2500,
     onClick: 'hide',
     onMouseover: 'pauseAutoHide',
     showDismissButton: true,
-    stacking: 5
+    stacking: 6
   },
   animations: {
     enabled: true,
@@ -32,7 +29,7 @@ const customNotifierOptions: NotifierOptions = {
     },
     hide: {
       preset: 'fade',
-      speed: 100,
+      speed: 50,
       easing: 'ease',
       offset: 50
     },

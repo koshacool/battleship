@@ -13,7 +13,7 @@ import { GAME_STATUSES, BOARD_SIZE } from '../../../constants';
 
 
 const validateHit = validationConfig => {
-  const rule = validationConfig.find(({condition}) => condition ? true : false);
+  const rule = validationConfig.find(({ condition }) => condition ? true : false);
 
   return rule ? rule.error : '';
 };
@@ -35,7 +35,7 @@ export class GameComponent implements OnInit, OnDestroy {
   ) {
     this.store.select('auth')
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(({user, isAuthinticated}) => {
+      .subscribe(({ user, isAuthinticated }) => {
         if (isAuthinticated && !this.userId) {
           this.userId = user.uid;
         }
@@ -45,12 +45,12 @@ export class GameComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(({id}) => {
-      this.store.select('games').subscribe(({games}) => {
-        const gameFromServer = games.find(({key}) => key === id);
-        this.gameService.restoreGame(new Game(gameFromServer));
+      .subscribe(({ id }) => {
+        this.store.select('games').subscribe(({ games }) => {
+          const gameFromServer = games.find(({ key }) => key === id);
+          this.gameService.restoreGame(new Game(gameFromServer));
+        });
       });
-    });
   }
 
 
@@ -60,12 +60,12 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   fire(e) {
-    const {id} = e.target;
+    const { id } = e.target;
     const row = id[0];
     const col = id[1];
     const boardId = id.slice(2);
-    const board = this.boards.find(({playerId}) => playerId === boardId);
-    const playerBoard = this.boards.find(({playerId}) => playerId !== '1');
+    const board = this.boards.find(({ playerId }) => playerId === boardId);
+    const playerBoard = this.boards.find(({ playerId }) => playerId !== '1');
     const tile = board.tiles[row][col];
     const error = this.checkValidHit(board, tile);
 
@@ -102,7 +102,7 @@ export class GameComponent implements OnInit, OnDestroy {
           type: 'success',
         });
       } else {
-        setTimeout(this.enemyTurn.bind(this), 200);
+        setTimeout(this.enemyTurn.bind(this), 100);
       }
 
       this.gameService.updateGame();
@@ -110,8 +110,8 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   enemyTurn() {
-    const board = this.boards.find(({playerId}) => playerId !== '1');
-    const computerBoard = this.boards.find(({playerId}) => playerId === '1');
+    const board = this.boards.find(({ playerId }) => playerId !== '1');
+    const computerBoard = this.boards.find(({ playerId }) => playerId === '1');
     const row = this.getRandomInt(BOARD_SIZE);
     const col = this.getRandomInt(BOARD_SIZE);
 
@@ -175,7 +175,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   get winner(): Board {
     if (this.game && this.game.boards) {
-      return this.game.boards.find(({score}) => score === BOARD_SIZE);
+      return this.game.boards.find(({ score }) => score === BOARD_SIZE);
     }
 
     return null;
