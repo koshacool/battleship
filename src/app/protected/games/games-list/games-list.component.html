@@ -1,20 +1,26 @@
 <div class="container">
-  <div class="column has-text-centered" *ngFor="let game of games">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title" [class.text-info]="game.status === 'notEnded'" [class.text-danger]="game.status === 'lost'"
-          [class.text-success]="game.status === 'win'">
-          {{getStatus(game)}}
-        </h4>
+  <div *ngIf="games.length > 0; else elseBlock">
+    <div class="column has-text-centered" *ngFor="let game of games">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" [class.text-info]="game.status === 'notEnded'"
+              [class.text-danger]="game.status === 'lost'"
+              [class.text-success]="game.status === 'win'">
+            {{getStatus(game)}}
+          </h4>
 
-        <p class="card-text">
-          {{game.date | amTimeAgo}}
-        </p>
+          <p class="card-text">
+            {{game.date | amTimeAgo}}
+          </p>
 
-        <a [routerLink]="[game.key]" class="card-link" *ngIf="game.status === 'notEnded'">
-          Continue game
-        </a>
+          <a [routerLink]="[game.key]" class="card-link">
+            {{game.status === 'notEnded' ? 'Continue game' : 'View game'}}
+          </a>
+        </div>
       </div>
     </div>
   </div>
+  <ng-template #elseBlock>
+    <h2>Games not found</h2>
+  </ng-template>
 </div>
