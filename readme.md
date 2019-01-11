@@ -39,7 +39,7 @@ $ npm run test
 
 We use [Travis Ci](https://travis-ci.org/) for deployment. 
 After merge changes into master branch the app will be automatically deployed to server 
-([ToDoList Demo](https://koshacool.github.io/battleship/)).
+([Battleship Demo](https://koshacool.github.io/battleship/)).
 
 ### Contributing
 Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
