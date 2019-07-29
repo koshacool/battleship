@@ -48,10 +48,6 @@ Please read [CONTRIBUTING.md](contributing.md) for details on our code of conduc
 
 * **[Roman Kushytskyy](https://github.com/koshacool)** - *Initial work*
 
-### Teachers
-
-- Nazar Lazorko
-- Andrii Postoliuk
 
 ### TODO
 - Add second real pleyer
